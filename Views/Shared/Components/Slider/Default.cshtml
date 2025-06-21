@@ -1,0 +1,21 @@
+﻿@model List<Movie>
+
+@if (Model != null && Model.Count > 0)
+{
+    <div class="slider-wrapper">
+        <div class="slider">
+            <div class="slides">
+                @foreach (var movie in Model)
+                {
+                    <a href="/Clients/Movies/Details/@movie.Id">
+                        <img src="@movie.PosterUrl" alt="@movie.Title" />
+                    </a>
+                }
+            </div>
+        </div>
+        <div class="welcome-overlay">
+            <h1>Welcome to Pop Cinema</h1>
+            <p>Your place to book tickets, watch trailers, and enjoy the movies!</p>
+        </div>
+    </div>
+}

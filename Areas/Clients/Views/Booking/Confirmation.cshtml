@@ -1,0 +1,95 @@
+﻿@model BookingConfirmationViewModel
+@{
+    ViewBag.Title = "Booking Confirmation";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="hero">
+    <div class="left">
+        <h1 class="text-success mb-4">✅ Booking Confirmed!</h1>
+
+        <div class="card p-4 shadow border border-danger-subtle animated-card">
+            <h3 class="mb-3">🎬 <strong>@Model.MovieTitle</strong></h3>
+
+            <p><strong>📅 Showtime:</strong> @Model.Showtime.ToString("f")</p>
+            <p><strong>🎟️ Seats Booked:</strong> @Model.NumberOfSeats</p>
+            <p><strong>💵 Price per Ticket:</strong> $@Model.TicketPrice.ToString("F2")</p>
+
+            @if (!string.IsNullOrEmpty(Model.PromotionCode))
+            {
+                <p><strong>🏷️ Promo Code:</strong> @Model.PromotionCode</p>
+                <p><strong>💰 Discount:</strong> -$@Model.Discount.ToString("F2")</p>
+            }
+
+            <hr />
+
+            <p><strong>🧾 Total Paid:</strong> <span class="fw-bold text-success">$@Model.TotalPrice.ToString("F2")</span></p>
+            <p><strong>🪑 Remaining Seats:</strong> <span class="text-danger">@Model.RemainingSeats</span></p>
+        </div>
+    </div>
+
+    <div class="right">
+        <img src="/assets/EatPop.png" alt="Pop Manager Eating PopCorn" class="img-fluid" />
+
+        <a href="/Clients/Movies/Index" class="btn btn-outline-danger mt-4 animated-button">🎥 Back to Movies</a>
+    </div>
+</section>
+
+<style>
+    .animated-card {
+        border: 2px solid #B30000;
+        border-radius: 12px;
+        transition: box-shadow 0.3s ease;
+        background-color: #fff;
+    }
+
+        .animated-card:hover {
+            box-shadow: 0 6px 18px rgba(179, 0, 0, 0.2);
+        }
+
+    .btn.animated-button {
+        display: inline-block;
+        font-weight: 500;
+        text-decoration: none;
+        transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.3s ease, color 0.3s ease;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        border: 2px solid #B30000;
+        border-radius: 8px;
+        padding: 0.5rem 1.2rem;
+        color: #B30000;
+        background-color: transparent;
+    }
+
+        .btn.animated-button:hover {
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+            background-color: #B30000;
+            color: white;
+            text-decoration: none;
+        }
+
+        .btn.animated-button:focus {
+            outline: 3px solid rgba(179, 0, 0, 0.3);
+            outline-offset: 2px;
+        }
+
+    .hero {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 40px;
+        padding: 40px;
+        flex-wrap: wrap;
+    }
+
+    .left {
+        flex: 1;
+        min-width: 320px;
+    }
+
+    .right {
+        flex: 1;
+        text-align: center;
+        min-width: 280px;
+    }
+</style>

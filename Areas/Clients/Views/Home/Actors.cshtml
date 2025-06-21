@@ -1,0 +1,92 @@
+﻿@model ActorsWithDirectorsVM
+@{
+    ViewBag.Title = "Directors and Actors";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="people-section">
+    <h2>🎬 Directors</h2>
+    @if (Model.Directors != null && Model.Directors.Any())
+    {
+        <div class="people-grid">
+            @foreach (var director in Model.Directors)
+            {
+                <div class="person-card">
+                    <img src="@Url.Content(director.PhotoUrl)" alt="@director.FullName" />
+                    <h4>@director.FullName</h4>
+                    <p>@director.Bio</p>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning">No directors available.</div>
+    }
+</section>
+
+<hr />
+
+<section class="people-section">
+    <h2>🎭 Actors</h2>
+    @if (Model.Actors != null && Model.Actors.Any())
+    {
+        <div class="people-grid">
+            @foreach (var actor in Model.Actors)
+            {
+                <div class="person-card">
+                    <img src="@Url.Content(actor.PhotoUrl)" alt="@actor.FullName" />
+                    <h4>@actor.FullName</h4>
+                    <p>@actor.Bio</p>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning">No actors available.</div>
+    }
+</section>
+
+<style>
+    .people-section {
+        margin-bottom: 3rem;
+    }
+
+    .people-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .person-card {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        padding: 1rem;
+        border-radius: 12px;
+        text-align: center;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        transition: transform 0.2s;
+    }
+
+        .person-card:hover {
+            transform: scale(1.03);
+        }
+
+        .person-card img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: 1rem;
+        }
+
+        .person-card h4 {
+            margin: 0.5rem 0 0.3rem;
+        }
+
+        .person-card p {
+            font-size: 0.9rem;
+            color: #555;
+        }
+</style>

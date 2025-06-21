@@ -1,0 +1,149 @@
+﻿@model BookingVM
+@{
+    ViewBag.Title = "Book Tickets";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="hero">
+    <div class="left">
+        <h1>Book Tickets for @Model.MovieTitle</h1>
+
+        <form asp-action="Index" method="post" onsubmit="return validateSeats()" class="p-4 rounded shadow bg-light animated-form">
+            <!-- ShowTime Dropdown -->
+            <div class="mb-3">
+                <label for="ShowTimeId" class="form-label">🎬 Select ShowTime</label>
+                <select class="form-select" id="ShowTimeId" name="ShowTimeId" required onchange="loadShowtimeDetails()">
+                    <option value="">-- Choose a Showtime --</option>
+                    @foreach (var show in Model.ShowTimes)
+                    {
+                        <option value="@show.Id">
+                            @show.StartTime.ToString("f") – $@show.TicketPrice
+                        </option>
+                    }
+                </select>
+            </div>
+
+            <!-- Seats Input -->
+            <div class="mb-3">
+                <label for="NumberOfSeats" class="form-label">🎟️ Number of Seats</label>
+                <input type="number" class="form-control" id="NumberOfSeats" name="NumberOfSeats" min="1" required oninput="updateTotalPrice()" />
+                <div id="seats-warning" class="text-danger mt-1" style="display:none;"></div>
+            </div>
+
+            <!-- Promo Code -->
+            <div class="mb-3">
+                <label for="PromoCode" class="form-label">💸 Promo Code (optional)</label>
+                <input type="text" class="form-control" name="PromoCode" />
+            </div>
+
+            <!-- Totals -->
+            <div class="mb-3">
+                <strong>Total Price:</strong> <span id="totalPrice">$0.00</span>
+            </div>
+
+            <input type="hidden" id="AvailableSeats" name="AvailableSeats" value="0" />
+            <input type="hidden" id="TicketPrice" name="TicketPrice" value="0" />
+
+            <button type="submit" class="btn btn-primary animated-button">✅ Confirm Booking</button>
+        </form>
+    </div>
+
+    <div class="right">
+        <img src="/assets/EatPop.png" alt="Pop Manager Eating PopCorn" />
+        <a href="/Clients/Movies/Index" class="btn btn-outline-danger mt-3 animated-button">🎥 Back to Movies</a>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        async function loadShowtimeDetails() {
+            const showtimeId = document.getElementById("ShowTimeId").value;
+            if (!showtimeId) return;
+
+            try {
+                const response = await fetch(`/Clients/Booking/GetShowtimeDetails/${showtimeId}`);
+                const data = await response.json();
+
+                document.getElementById("AvailableSeats").value = data.availableSeats;
+                document.getElementById("TicketPrice").value = data.ticketPrice;
+
+                updateTotalPrice();
+                document.getElementById("seats-warning").style.display = "none";
+            } catch (error) {
+                console.error("Error fetching showtime data:", error);
+            }
+        }
+
+        function updateTotalPrice() {
+            const seats = parseInt(document.getElementById("NumberOfSeats").value) || 0;
+            const price = parseFloat(document.getElementById("TicketPrice").value) || 0;
+            document.getElementById("totalPrice").innerText = `$${(seats * price).toFixed(2)}`;
+        }
+
+        function validateSeats() {
+            const requested = parseInt(document.getElementById("NumberOfSeats").value);
+            const available = parseInt(document.getElementById("AvailableSeats").value);
+            const warning = document.getElementById("seats-warning");
+
+            if (requested > available) {
+                warning.innerText = `Only ${available} seats available.`;
+                warning.style.display = "block";
+                return false;
+            }
+
+            warning.style.display = "none";
+            return true;
+        }
+    </script>
+}
+
+<style>
+    .animated-form {
+        max-width: 500px;
+        margin: auto;
+        border: 2px solid #B30000;
+        transition: box-shadow 0.3s ease;
+    }
+
+        .animated-form:hover {
+            box-shadow: 0 6px 16px rgba(179, 0, 0, 0.2);
+        }
+
+    .btn.animated-button {
+        display: inline-block;
+        font-weight: 500;
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        border: 2px solid #B30000;
+        border-radius: 8px;
+        padding: 0.5rem 1.2rem;
+        background-color: #B30000;
+        color: white;
+    }
+
+        .btn.animated-button:hover {
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 6px 16px rgba(179, 0, 0, 0.4);
+        }
+
+    .hero {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 40px;
+        padding: 40px;
+        flex-wrap: wrap;
+    }
+
+    .left {
+        flex: 1;
+        min-width: 320px;
+    }
+
+    .right {
+        flex: 1;
+        text-align: center;
+        min-width: 280px;
+    }
+</style>
+

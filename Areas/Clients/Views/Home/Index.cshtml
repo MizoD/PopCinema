@@ -1,0 +1,95 @@
+﻿@model IEnumerable<Movie>
+@{
+    ViewBag.Title = "Welcome to Pop Cinema";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="hero">
+    <div class="left">
+        <h1><span class="highlight">Pop</span> Cinema</h1>
+        
+        <div class="text-center mt-4">
+            <a href="/Clients/Booking/Booked" class="btn btn-outline-primary animated-button-red">📖 View All Bookings</a>
+        </div>
+
+    </div>
+    <div class="right">
+        <img src="/assets/EatPop.png" alt="Pop Manager Eating PopCorn" />
+    </div>
+</section>
+
+<section class="movies">
+    <h2>Now Showing</h2>
+    @if (Model is not null)
+    {
+    <div class="movie-grid">
+        @foreach (var movie in Model)
+        {
+                var hasFutureShowtimes = movie.ShowTimes?.Any(s => s.StartTime > DateTime.Now) == true;
+            <div class="movie-card">
+                    <a href="/Clients/Movies/Details/@movie.Id"> <img src="@movie.PosterUrl" alt="@movie.Title" /> </a>
+                    
+                <h3>@movie.Title</h3>
+                <p>@movie.Description</p>
+
+                    <div class="movie-actions">
+                        @if (hasFutureShowtimes)
+                        {
+                            <a href="/Clients/Booking/Index/@movie.Id" class="icon-button book">
+                                <span class="material-icons">event</span>
+                                <span class="btn-text">Book</span>
+                            </a>
+                        }
+                        else
+                        {
+                            <span class="icon-button book disabled" title="No available showtimes">
+                                <span class="material-icons">event_busy</span>
+                                <span class="btn-text">No Showtimes</span>
+                            </span>
+                        }
+                        <a href="/Clients/Movies/Details/@movie.Id" class="icon-button details">
+                            <span class="material-icons">info</span>
+                            <span class="btn-text">Details</span>
+                        </a>
+                    </div>
+            </div>
+        }
+    </div>
+    }
+    else
+    {
+        <div class="container">
+            <div class="col-12">
+                <p> There is no Movies to show at this time</p>
+            </div>
+        </div>
+    }
+</section>
+
+<style>
+    .btn.animated-button-red {
+        display: inline-block;
+        font-weight: 500;
+        transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.3s, color 0.3s;
+        box-shadow: 0 4px 12px rgba(179, 0, 0, 0.1);
+        border: 2px solid #B30000;
+        border-radius: 8px;
+        padding: 0.5rem 1.2rem;
+        background-color: transparent;
+        color: #B30000;
+        text-decoration: none;
+    }
+
+        .btn.animated-button-red:hover {
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 6px 16px rgba(179, 0, 0, 0.4);
+            background-color: #B30000;
+            color: white;
+        }
+
+        .btn.animated-button-red:focus {
+            outline: 3px solid rgba(179, 0, 0, 0.3);
+            outline-offset: 2px;
+        }
+</style>
+

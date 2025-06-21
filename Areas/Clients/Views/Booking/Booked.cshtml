@@ -1,0 +1,153 @@
+﻿@model List<Booking>
+@{
+    ViewBag.Title = "All Bookings";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<form method="get" class="modern-filter d-flex gap-3 align-items-center flex-wrap p-3 shadow-sm rounded">
+    <input type="date" name="date" class="form-control fancy-input" placeholder="📅 Date" value="@ViewBag.Date" />
+    <input type="text" name="search" class="form-control fancy-input" placeholder="🎬 Movie Title" value="@ViewBag.Search" />
+
+    <button type="submit" class="btn animated-button-red">🔍 Filter</button>
+    <a href="/Clients/Booking/Booked" class="btn animated-button-outline">♻️ Reset</a>
+</form>
+
+
+
+<section class="people-section">
+    <h2 class="mb-4">🎟️ All Bookings</h2>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="people-grid">
+            @foreach (var booking in Model)
+            {
+                var movie = booking.ShowTime?.Movie;
+                <div class="person-card">
+                    <h4>🎬 @movie?.Title</h4>
+                    <p><strong>⏰ Showtime:</strong> @booking.ShowTime?.StartTime.ToString("f")</p>
+                    <p><strong>🏟️ Hall:</strong> @booking.CinemaHall?.Name</p>
+                    <p><strong>🎫 Seats:</strong> @booking.NumberOfSeats</p>
+                    <p><strong>💵 Ticket Price:</strong> $@booking.ShowTime?.TicketPrice.ToString("F2")</p>
+
+                    @if (booking.Promotion != null)
+                    {
+                        <p><strong>🎁 Promo:</strong> @booking.Promotion.Code</p>
+                        <p><strong>🔻 Discount:</strong> @booking.Promotion.DiscountPercentage%</p>
+                    }
+
+                    <hr />
+                    <p><strong>💰 Total Paid:</strong> <span class="fw-bold">$@booking.TotalAmount.ToString("F2")</span></p>
+                    <p class="text-muted small">Booked at: @booking.BookingTime.ToString("g")</p>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning text-center">No bookings found.</div>
+    }
+</section>
+
+<style>
+    .people-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .person-card {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        padding: 1rem;
+        border-radius: 12px;
+        text-align: left;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+        .person-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .person-card h4 {
+            margin-bottom: 0.75rem;
+            color: #B30000;
+        }
+
+        .person-card p {
+            margin: 0.3rem 0;
+            font-size: 0.95rem;
+        }
+
+    hr {
+        margin: 0.8rem 0;
+    }
+
+</style>
+<style>
+    .modern-filter {
+        background: #fff;
+        border: 2px solid #B30000;
+        border-radius: 12px;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        padding: 1rem;
+    }
+
+    .fancy-input {
+        flex: 1 1 200px;
+        min-width: 180px;
+        border: 2px solid #B30000;
+        border-radius: 8px;
+        padding: 0.55rem 1rem;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+
+        .fancy-input::placeholder {
+            color: #999;
+            font-style: italic;
+        }
+
+        .fancy-input:focus {
+            outline: none;
+            border-color: #B30000;
+            box-shadow: 0 0 10px rgba(179, 0, 0, 0.35);
+        }
+
+    .btn.animated-button-red,
+    .btn.animated-button-outline {
+        white-space: nowrap;
+        padding: 0.5rem 1.2rem;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        border: 2px solid #B30000;
+    }
+
+    .btn.animated-button-red {
+        background-color: #B30000;
+        color: white;
+    }
+
+        .btn.animated-button-red:hover {
+            background-color: white;
+            color: #B30000;
+            transform: translateY(-1px) scale(1.03);
+            box-shadow: 0 6px 14px rgba(179, 0, 0, 0.2);
+        }
+
+    .btn.animated-button-outline {
+        background-color: transparent;
+        color: #B30000;
+    }
+
+        .btn.animated-button-outline:hover {
+            background-color: #B30000;
+            color: white;
+            transform: translateY(-1px) scale(1.03);
+            box-shadow: 0 6px 14px rgba(179, 0, 0, 0.2);
+        }
+</style>

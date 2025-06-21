@@ -1,0 +1,50 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Pop Cinema</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <header class="main-header">
+        <div class="container">
+            <div class="logo">
+                <a href="/Clients/Home/Index">
+                    <img src="/assets/EatPop.png" alt="Pop Cinema Logo" class="logo-img" />
+                    Pop Cinema
+                </a>
+            </div>
+
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="/Clients/Home/Index">Home</a></li>
+                    <li><a href="/Clients/Movies/Index">Movies</a></li>
+                    <li><a href="/Clients/Home/Actors">Actors</a></li>
+                </ul>
+            </nav>
+            <form class="search-bar" method="get" action="/Clients/Movies/Search">
+                <input type="text" name="query" placeholder="Search movies..." />
+                <button type="submit">🔍</button>
+            </form>
+        </div>
+    </header>
+    @if (Context.Request.Path == "/Clients/Home/Index")
+    {
+        @await Component.InvokeAsync("Slider")
+    }
+
+    <main class="main-content">
+        @RenderBody()
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p>&copy; 2025 PoP Cinema. All rights reserved.</p>
+        </div>
+    </footer>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

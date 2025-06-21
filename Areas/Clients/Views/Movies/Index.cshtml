@@ -1,0 +1,124 @@
+﻿@model MoviesWithShowsVM
+@{
+    ViewBag.Title = "Movies";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@if (Model is not null)
+{
+    <section class="movies">
+    <h2>🎬 Available Showtimes</h2>
+
+    @if (Model.ShowTimes != null && Model.ShowTimes.Any())
+    {
+        <div class="movie-grid">
+                @foreach (var show in Model.ShowTimes)
+                {
+                var hasFutureShowtimes = show.Movie.ShowTimes?.Any(s => s.StartTime > DateTime.Now) == true;
+                    if (hasFutureShowtimes)
+                    {
+                        <div class="movie-card">
+                            <a href="/Clients/Movies/Details/@show.MovieId"> <img src="@show.Movie.PosterUrl" alt="@show.Movie.Title" /> </a>
+                            <h3>@show.Movie.Title</h3>
+                            <p class="mb-1">
+                                <strong>🎥 Hall:</strong> @show.CinemaHall.Name
+                            </p>
+                            <p class="mb-1">
+                                <strong>⏰ Time:</strong> @show.StartTime.ToShortDateString() – @show.StartTime.ToShortTimeString()
+                            </p>
+                            <p class="mb-2">
+                                <strong>💰 Price:</strong> $@show.TicketPrice
+                            </p>
+                            <div class="movie-actions">
+                                @if (hasFutureShowtimes)
+                                {
+                                    <a href="/Clients/Booking/Index/@show.Movie.Id" class="icon-button book">
+                                        <span class="material-icons">event</span>
+                                        <span class="btn-text">Book</span>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <span class="icon-button book disabled" title="No available showtimes">
+                                        <span class="material-icons">event_busy</span>
+                                        <span class="btn-text">No Showtimes</span>
+                                    </span>
+                                }
+                                <a href="/Clients/Movies/Details/@show.Movie.Id" class="icon-button details">
+                                    <span class="material-icons">info</span>
+                                    <span class="btn-text">Details</span>
+                                </a>
+                            </div>
+                        </div>
+                    }
+               
+                     
+                }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning text-center">
+            There are no available showtimes.
+        </div>
+    }
+    </section>
+
+    <section class="movies">
+        <h2>All Movies</h2>
+        @if (Model.Movies is not null)
+        {
+            <div class="movie-grid">
+                @foreach (var movie in Model.Movies)
+                {
+                    var hasFutureShowtimes = movie.ShowTimes?.Any(s => s.StartTime > DateTime.Now) == true;
+                    <div class="movie-card">
+                        <a href="/Clients/Movies/Details/@movie.Id"> <img src="@movie.PosterUrl" alt="@movie.Title" /> </a>
+                        <h3>@movie.Title</h3>
+
+                        @if (movie.Actors is not null)
+                        {
+                            <div class="actor-photos">
+                                @foreach (var actor in movie.Actors)
+                                {
+                                    <img src="@Url.Content(actor.Actor.PhotoUrl)" alt="@actor.Actor.FullName" class="actor-photo" />
+                                }
+                            </div>
+                        }
+
+                        <p>@movie.Description</p>
+
+                        <div class="movie-actions">
+                            @if (hasFutureShowtimes)
+                            {
+                                <a href="/Clients/Booking/Index/@movie.Id" class="icon-button book">
+                                    <span class="material-icons">event</span>
+                                    <span class="btn-text">Book</span>
+                                </a>
+                            }
+                            else
+                            {
+                                <span class="icon-button book disabled" title="No available showtimes">
+                                    <span class="material-icons">event_busy</span>
+                                    <span class="btn-text">No Showtimes</span>
+                                </span>
+                            }
+                            <a href="/Clients/Movies/Details/@movie.Id" class="icon-button details">
+                                <span class="material-icons">info</span>
+                                <span class="btn-text">Details</span>
+                            </a>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="container">
+                <div class="col-12">
+                    <p> There is no Movies to show</p>
+                </div>
+            </div>
+        }
+
+    </section>
+}

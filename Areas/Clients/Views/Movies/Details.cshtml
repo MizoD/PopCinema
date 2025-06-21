@@ -1,0 +1,108 @@
+﻿@model Movie
+@{
+    ViewBag.Title = Model.Title;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var hasFutureShowtimes = Model.ShowTimes?.Any(s => s.StartTime > DateTime.Now) == true;
+}
+<div class="movie-details">
+    <h1>@Model.Title</h1>
+
+    <img src="@Model.PosterUrl" alt="@Model.Title" style="max-width: 300px; border-radius: 12px;" />
+
+    <p><strong>Description:</strong> @Model.Description</p>
+    <p><strong>Genres:</strong> @string.Join(", ", Model.Genre?.Name)</p>
+    <p><strong>Director:</strong> @Model.Director?.FullName</p>
+
+    <div class="actors-section">
+        <h3>Actors</h3>
+        @if (Model.Actors != null && Model.Actors.Any())
+        {
+            <div class="actor-photos">
+                @foreach (var movieActor in Model.Actors)
+                {
+                    if (movieActor != null)
+                    {
+                        <div class="actor-card">
+                            <img src="@movieActor.Actor.PhotoUrl" alt="@movieActor.Actor.FullName" class="actor-photo" />
+                            <p>@movieActor.Actor.FullName</p>
+                        </div>
+                    }
+                }
+            </div>
+        }
+        else
+        {
+            <p>No actors listed.</p>
+        }
+    </div>
+    @if (hasFutureShowtimes)
+    {
+        <a href="/Clients/Booking/Index/@Model.Id" class="btn animated-button mt-3">Book Now</a>
+    }
+    else
+    {
+        <a class="btn animated-button disabled-button mt-3" href="javascript:void(0);">🎟️ Book Now</a>
+    }
+</div>
+
+<style>
+    .movie-details {
+        max-width: 800px;
+        margin: auto;
+        padding: 20px;
+    }
+
+    .actors-section {
+        margin-top: 20px;
+    }
+
+    .actor-photos {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .actor-card {
+        text-align: center;
+    }
+
+    .actor-photo {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #ccc;
+    }
+
+    .btn.animated-button {
+        display: inline-block;
+        font-weight: 500;
+        text-decoration: none;
+        transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.3s ease, color 0.3s ease;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        border: 2px solid #B30000;
+        border-radius: 8px;
+        padding: 0.5rem 1.2rem;
+        color: #B30000;
+        background-color: transparent;
+    }
+
+        .btn.animated-button:hover {
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+            background-color: #B30000;
+            color: white;
+            text-decoration: none;
+        }
+
+    .btn.disabled-button {
+        opacity: 0.6;
+        pointer-events: none;
+        cursor: not-allowed;
+        background-color: #f8d7da;
+        color: #B30000;
+        border-color: #B30000;
+        box-shadow: none;
+        transform: none;
+    }
+</style>
