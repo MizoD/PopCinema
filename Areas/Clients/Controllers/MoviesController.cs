@@ -7,41 +7,51 @@ namespace PopCinema.Areas.Clients.Controllers
     public class MoviesController : Controller
     {
         ApplicationDbContext _context = new();
-        public IActionResult Index(int moviePage = 1, int showPage = 1)
+        public IActionResult Index(int page = 1)
         {
-            //const double totalNumberInPages = 8.0;
-            IQueryable<Movie> movies = _context.Movies.Include(e=> e.Actors).ThenInclude(e=> e.Actor).Include(e=> e.ShowTimes);
-            IQueryable<ShowTime> showTimes = _context.ShowTimes.Include(e=> e.CinemaHall).OrderBy(e => e.StartTime).Skip(0).Take(8);
-            
+            const int pageSize = 8;
 
-            //var totalNumberOfMoviePages = Math.Ceiling(movies.Count() / totalNumberInPages);
-            //var totalNumberOfShowPages = Math.Ceiling(showTimes.Count() / totalNumberInPages);
+            IQueryable<Movie> movies = _context.Movies.Include(e => e.ShowTimes).Include(e=> e.Actors).ThenInclude(e=> e.Actor);
+            IQueryable<ShowTime> showTimes = _context.ShowTimes.Where(e=> e.EndTime > DateTime.Now).Include(s => s.Movie).ThenInclude(m => m.ShowTimes).Include(e=> e.CinemaHall).OrderBy(e => e.StartTime).Skip(0).Take(8);
 
-            //if (totalNumberOfMoviePages < moviePage || totalNumberOfShowPages < showPage)
-            //    return RedirectToAction(nameof(NotFoundPage));
+            int totalMovies = movies.Count();
 
-            //movies = movies.Skip((moviePage - 1) * (int)totalNumberInPages).Take((int)totalNumberInPages);
-
-            //ViewBag.totalNumberOfMoviePages = totalNumberOfMoviePages;
-            //ViewBag.currentMoviePage = moviePage;
-
-            //showTimes = showTimes.Skip((showPage - 1) * (int)totalNumberInPages).Take((int)totalNumberInPages);
-
-            //ViewBag.totalNumberOfShowPages = totalNumberOfShowPages;
-            //ViewBag.currentShowPage = showPage;
-
-            MoviesWithShowsVM moviesWithShows = new(movies.ToList(), showTimes.ToList());
-            return View(moviesWithShows);
+            movies = movies
+                .OrderBy(m => m.Title)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize);
+            var vm = new MoviesVM
+            {
+                Movies = movies.ToList(),
+                ShowTimes = showTimes.ToList(),
+                CurrentPage = page,
+                TotalPages = (int)Math.Ceiling((double)totalMovies / pageSize)
+            };
+            return View(vm);
         }
         public IActionResult Details(int id)
         {
-            var movie = _context.Movies.Include(e=> e.CinemaHall).Include(e=> e.Director).Include(e=> e.Genre).Include(e=> e.ShowTimes).Include(e => e.Actors).ThenInclude(e => e.Actor)
+            var movie = _context.Movies
+                .Include(m => m.Genre)
+                .Include(m => m.Director)
+                .Include(m => m.CinemaHall)
+                .Include(m => m.ShowTimes)
+                    .ThenInclude(s => s.CinemaHall)
+                .Include(m => m.Actors)
+                    .ThenInclude(am => am.Actor)
                 .FirstOrDefault(m => m.Id == id);
 
             if (movie == null)
             {
                 return RedirectToAction(nameof(NotFoundPage));
             }
+            var reviews = _context.Reviews
+                .Where(r => r.MovieId == id)
+                .OrderByDescending(r => r.ReviewDate)
+                .ToList();
+
+            ViewBag.Reviews = reviews;
+
 
             return View(movie);
         }
@@ -59,6 +69,27 @@ namespace PopCinema.Areas.Clients.Controllers
                 return RedirectToAction(nameof(NotFoundPage));
 
             return RedirectToAction("Details", new { id = movie.Id });
+        }
+
+        [HttpPost]
+        public IActionResult AddReview(Review review)
+        {
+            Console.WriteLine($"Review Data: {review.ReviewerName}, {review.Comment}, {review.Rating}, {review.MovieId}");
+
+            if (!ModelState.IsValid)
+            {
+                TempData["Error"] = "Please fill in all fields correctly.";
+                return RedirectToAction("Details", new { id = review.MovieId });
+            }
+
+            var movie = _context.Movies.Find(review.MovieId);
+            if (movie == null) return NotFound();
+
+            review.ReviewDate = DateTime.Now;
+            _context.Reviews.Add(review);
+            _context.SaveChanges();
+
+            return RedirectToAction("Details", new { id = review.MovieId });
         }
 
         public IActionResult NotFoundPage()

@@ -1,4 +1,4 @@
-﻿@model MoviesWithShowsVM
+﻿@model MoviesVM
 @{
     ViewBag.Title = "Movies";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -65,17 +65,19 @@
 
     <section class="movies">
         <h2>All Movies</h2>
-        @if (Model.Movies is not null)
+        @if (Model.Movies != null && Model.Movies.Any())
         {
             <div class="movie-grid">
                 @foreach (var movie in Model.Movies)
                 {
                     var hasFutureShowtimes = movie.ShowTimes?.Any(s => s.StartTime > DateTime.Now) == true;
                     <div class="movie-card">
-                        <a href="/Clients/Movies/Details/@movie.Id"> <img src="@movie.PosterUrl" alt="@movie.Title" /> </a>
+                        <a href="/Clients/Movies/Details/@movie.Id">
+                            <img src="@movie.PosterUrl" alt="@movie.Title" />
+                        </a>
                         <h3>@movie.Title</h3>
 
-                        @if (movie.Actors is not null)
+                        @if (movie.Actors != null && movie.Actors.Any())
                         {
                             <div class="actor-photos">
                                 @foreach (var actor in movie.Actors)
@@ -110,15 +112,99 @@
                     </div>
                 }
             </div>
+
+            <div class="pagination-wrapper mt-5">
+                <nav>
+                    <ul class="pagination justify-content-center flex-wrap custom-pagination">
+                        @if (Model.CurrentPage > 1)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" href="?page=@(Model.CurrentPage - 1)">« Prev</a>
+                            </li>
+                        }
+
+                        @for (int i = 1; i <= Model.TotalPages; i++)
+                        {
+                            <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                                <a class="page-link" href="?page=@i">@i</a>
+                            </li>
+                        }
+
+                        @if (Model.CurrentPage < Model.TotalPages)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" href="?page=@(Model.CurrentPage + 1)">Next »</a>
+                            </li>
+                        }
+                    </ul>
+                </nav>
+            </div>
+
+
         }
         else
         {
             <div class="container">
                 <div class="col-12">
-                    <p> There is no Movies to show</p>
+                    <p>There are no movies to show.</p>
                 </div>
             </div>
         }
-
     </section>
 }
+
+<style>
+    .pagination-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-top: 30px;
+    }
+
+    .custom-pagination {
+        display: flex;
+        flex-direction: row; 
+        gap: 0.5rem;
+        flex-wrap: wrap; 
+        list-style: none; 
+        padding-left: 0; 
+        margin-bottom: 0;
+    }
+
+    .custom-pagination .page-item {
+        margin: 0 3px;
+    }
+
+    .custom-pagination .page-link {
+        color: #B30000;
+        font-weight: 500;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 0.4rem 0.9rem;
+        transition: all 0.3s ease;
+        background-color: #fff;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);  
+    }
+
+        .custom-pagination .page-link:hover {
+            background-color: rgba(179, 0, 0, 0.1);
+            border-color: #B30000;
+            color: #B30000;
+            transform: translateY(-1px);
+        }
+
+    .custom-pagination .page-item.active .page-link {
+        background-color: #B30000;
+        color: white;
+        border-color: #B30000;
+        box-shadow: 0 3px 10px rgba(179, 0, 0, 0.3);
+    }
+
+    .custom-pagination .page-item.disabled .page-link {
+        pointer-events: none;
+        opacity: 0.5;
+    }
+</style>
+
+
+

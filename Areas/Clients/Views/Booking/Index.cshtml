@@ -6,9 +6,9 @@
 
 <section class="hero">
     <div class="left">
-        <h1>Book Tickets for @Model.MovieTitle</h1>
+        <h1>🎟️ Book Tickets for @Model.MovieTitle</h1>
 
-        <form asp-action="Index" method="post" onsubmit="return validateSeats()" class="p-4 rounded shadow bg-light animated-form">
+        <form asp-action="Index" method="post" onsubmit="return validateSeats()" class="p-4 animated-form">
             <!-- ShowTime Dropdown -->
             <div class="mb-3">
                 <label for="ShowTimeId" class="form-label">🎬 Select ShowTime</label>
@@ -44,12 +44,12 @@
             <input type="hidden" id="AvailableSeats" name="AvailableSeats" value="0" />
             <input type="hidden" id="TicketPrice" name="TicketPrice" value="0" />
 
-            <button type="submit" class="btn btn-primary animated-button">✅ Confirm Booking</button>
+            <button type="submit" class="btn animated-button">✅ Confirm Booking</button>
         </form>
     </div>
 
     <div class="right">
-        <img src="/assets/EatPop.png" alt="Pop Manager Eating PopCorn" />
+        <img src="/assets/EatPop.png" alt="Pop Manager Eating PopCorn" class="img-fluid" />
         <a href="/Clients/Movies/Index" class="btn btn-outline-danger mt-3 animated-button">🎥 Back to Movies</a>
     </div>
 </section>
@@ -97,53 +97,118 @@
     </script>
 }
 
-<style>
-    .animated-form {
-        max-width: 500px;
-        margin: auto;
-        border: 2px solid #B30000;
-        transition: box-shadow 0.3s ease;
-    }
 
-        .animated-form:hover {
-            box-shadow: 0 6px 16px rgba(179, 0, 0, 0.2);
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
         }
 
-    .btn.animated-button {
-        display: inline-block;
-        font-weight: 500;
-        transition: transform 0.25s ease, box-shadow 0.25s ease;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        border: 2px solid #B30000;
-        border-radius: 8px;
-        padding: 0.5rem 1.2rem;
-        background-color: #B30000;
-        color: white;
-    }
-
-        .btn.animated-button:hover {
-            transform: translateY(-2px) scale(1.03);
-            box-shadow: 0 6px 16px rgba(179, 0, 0, 0.4);
+        .hero {
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 40px;
+            padding: 40px;
+            flex-wrap: wrap;
+            background: linear-gradient(135deg, #ffffff, #fff5f5);
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            animation: fadeIn 0.6s ease-in-out;
+            overflow: hidden;
+            z-index: 1;
         }
 
-    .hero {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        gap: 40px;
-        padding: 40px;
-        flex-wrap: wrap;
-    }
+        .left {
+            flex: 1;
+            min-width: 320px;
+        }
 
-    .left {
-        flex: 1;
-        min-width: 320px;
-    }
+        .right {
+            flex: 1;
+            text-align: center;
+            min-width: 280px;
+        }
 
-    .right {
-        flex: 1;
-        text-align: center;
-        min-width: 280px;
-    }
-</style>
+        .animated-form {
+            background: #fff;
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid #e0e0e0;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s ease;
+            animation: slideUp 0.5s ease-in-out;
+        }
 
+            .animated-form:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+            }
+
+        .form-control, .form-select {
+            border-radius: 12px;
+            padding: 10px 14px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            transition: border-color 0.3s ease;
+        }
+
+            .form-control:focus, .form-select:focus {
+                border-color: #B30000;
+                box-shadow: 0 0 0 0.15rem rgba(179, 0, 0, 0.25);
+            }
+
+        .btn.animated-button {
+            font-weight: 600;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+            border: none;
+            border-radius: 10px;
+            padding: 12px 24px;
+            background-color: #B30000;
+            color: white;
+            font-size: 16px;
+            letter-spacing: 0.5px;
+        }
+
+            .btn.animated-button:hover {
+                transform: scale(1.05);
+                box-shadow: 0 8px 24px rgba(179, 0, 0, 0.3);
+                background-color: #a00000;
+            }
+
+        .btn-outline-danger {
+            border-radius: 10px;
+            font-weight: 500;
+            padding: 10px 20px;
+        }
+
+        @@keyframes slideUp {
+            from
+
+        {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        }
+
+        @@keyframes fadeIn {
+            from
+
+        {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+
+        }
+    </style>

@@ -4,56 +4,166 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     var hasFutureShowtimes = Model.ShowTimes?.Any(s => s.StartTime > DateTime.Now) == true;
 }
-<div class="movie-details">
-    <h1>@Model.Title</h1>
 
-    <img src="@Model.PosterUrl" alt="@Model.Title" style="max-width: 300px; border-radius: 12px;" />
+<div class="movie-details-container">
+    <div class="movie-poster">
+        <img src="@Model.PosterUrl" alt="@Model.Title" />
+    </div>
 
-    <p><strong>Description:</strong> @Model.Description</p>
-    <p><strong>Genres:</strong> @string.Join(", ", Model.Genre?.Name)</p>
-    <p><strong>Director:</strong> @Model.Director?.FullName</p>
+    <div class="movie-info">
+        <h1>@Model.Title</h1>
+        <div class="trailer-embed mt-4">
+            <iframe width="300" height="180" src="@Model.TrailerUrl" frameborder="0" allowfullscreen></iframe>
+        </div>
+        <p><strong>Description:</strong> @Model.Description</p>
+        <p><strong>Genre:</strong> @Model.Genre?.Name</p>
+        <p><strong>Director:</strong> @Model.Director?.FullName</p>
+        <p><strong>Release Date:</strong> @Model.ReleaseDate.ToString("MMMM dd, yyyy")</p>
+        <p><strong>Language:</strong> @Model.Language</p>
+        <p><strong>Duration:</strong> @Model.DurationMinutes minutes</p>
 
-    <div class="actors-section">
-        <h3>Actors</h3>
-        @if (Model.Actors != null && Model.Actors.Any())
-        {
-            <div class="actor-photos">
-                @foreach (var movieActor in Model.Actors)
-                {
-                    if (movieActor != null)
+        <div class="tabs mt-4">
+            <ul class="nav nav-tabs dark-light-tabs" id="movieTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="actors-tab" data-bs-toggle="tab" data-bs-target="#actors" type="button" role="tab">🎭 Actors</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="showtimes-tab" data-bs-toggle="tab" data-bs-target="#showtimes" type="button" role="tab">🕒 Showtimes</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews" type="button" role="tab">📝 Reviews</button>
+                </li>
+            </ul>
+            <div class="tab-content p-3 border border-top-0 tab-animated" id="movieTabsContent">
+                <div class="tab-pane fade show active" id="actors" role="tabpanel">
+                    @if (Model.Actors != null && Model.Actors.Any())
                     {
-                        <div class="actor-card">
-                            <img src="@movieActor.Actor.PhotoUrl" alt="@movieActor.Actor.FullName" class="actor-photo" />
-                            <p>@movieActor.Actor.FullName</p>
+                        <div class="actor-photos">
+                            @foreach (var movieActor in Model.Actors)
+                            {
+                                if (movieActor?.Actor != null)
+                                {
+                                    <div class="actor-card">
+                                        <img src="@movieActor.Actor.PhotoUrl" alt="@movieActor.Actor.FullName" class="actor-photo" />
+                                        <p>@movieActor.Actor.FullName</p>
+                                    </div>
+                                }
+                            }
                         </div>
                     }
-                }
+                    else
+                    {
+                        <p>No actors listed.</p>
+                    }
+                </div>
+                <div class="tab-pane fade" id="showtimes" role="tabpanel">
+                    @if (Model.ShowTimes != null && Model.ShowTimes.Any(s => s.StartTime > DateTime.Now))
+                    {
+                        <ul>
+                            @foreach (var time in Model.ShowTimes.Where(s => s.StartTime > DateTime.Now))
+                            {
+                                if (time != null && time.CinemaHall != null)
+                                {
+                                    <li>@time.StartTime.ToString("f") - @time.CinemaHall.Name - $@time.TicketPrice</li>
+                                }
+                            }
+                        </ul>
+                        <div class="d-flex justify-content-center mt-3">
+                            @if (hasFutureShowtimes)
+                            {
+                                <a href="/Clients/Booking/Index/@Model.Id" class="btn animated-button">🎟️ Book Now</a>
+                            }
+                            else
+                            {
+                                <a class="btn animated-button disabled-button" href="javascript:void(0);">🎟️ Book Now</a>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <p>No upcoming showtimes.</p>
+                    }
+                </div>
+                <div class="tab-pane fade" id="reviews" role="tabpanel">
+                    <h5>User Reviews</h5>
+                    <div class="mb-4">
+                        @foreach (var review in ViewBag.Reviews)
+                        {
+                            <div class="review-entry">
+                                <p><strong>@review.ReviewerName</strong> – @review.ReviewDate.ToShortDateString()</p>
+                                <p>@review.Comment</p>
+                                <div class="star-rating">
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        <span>@(i <= review.Rating ? "★" : "☆")</span>
+                                    }
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+                    @if (TempData["Error"] != null)
+                    {
+                        <div class="alert alert-danger">@TempData["Error"]</div>
+                    }
+                    @if (TempData["Success"] != null)
+                    {
+                        <div class="alert alert-success">@TempData["Success"]</div>
+                    }
+                    <form asp-area="Clients" asp-controller="Movies" asp-action="AddReview" method="post" class="review-form mt-3">
+                        <input type="hidden" name="MovieId" value="@Model.Id" />
+                        <div class="mb-2">
+                            <input type="text" name="ReviewerName" class="form-control" placeholder="Your Name" required />
+                        </div>
+                        <div class="mb-3">
+                            <textarea name="Comment" class="form-control" rows="3" placeholder="Write your review..." required></textarea>
+                        </div>
+                        <div class="mb-3 rating-select">
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                <label>
+                                    <input type="radio" name="Rating" value="@i" required hidden />
+                                    <span class="star">☆</span>
+                                </label>
+                            }
+                        </div>
+                        <button type="submit" class="btn btn-outline-danger">Submit Review</button>
+                    </form>
+
+                </div>
             </div>
-        }
-        else
-        {
-            <p>No actors listed.</p>
-        }
+        </div>
     </div>
-    @if (hasFutureShowtimes)
-    {
-        <a href="/Clients/Booking/Index/@Model.Id" class="btn animated-button mt-3">Book Now</a>
-    }
-    else
-    {
-        <a class="btn animated-button disabled-button mt-3" href="javascript:void(0);">🎟️ Book Now</a>
-    }
 </div>
 
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 <style>
-    .movie-details {
-        max-width: 800px;
+    .movie-details-container {
+        display: flex;
+        gap: 40px;
+        padding: 30px;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        max-width: 1200px;
         margin: auto;
-        padding: 20px;
     }
 
-    .actors-section {
-        margin-top: 20px;
+    .movie-poster img {
+        max-width: 300px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    .trailer-embed iframe {
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    .movie-info {
+        flex: 1;
+        min-width: 300px;
     }
 
     .actor-photos {
@@ -67,8 +177,8 @@
     }
 
     .actor-photo {
-        width: 100px;
-        height: 100px;
+        width: 80px;
+        height: 80px;
         border-radius: 50%;
         object-fit: cover;
         border: 2px solid #ccc;
@@ -105,4 +215,54 @@
         box-shadow: none;
         transform: none;
     }
+
+    .dark-light-tabs .nav-link.active {
+        background-color: #B30000;
+        color: white;
+        font-weight: bold;
+    }
+
+    .dark-light-tabs .nav-link {
+        color: #B30000;
+        border-color: #B30000;
+    }
+
+    .tab-animated .tab-pane {
+        transition: opacity 0.5s ease-in-out;
+    }
+
+    .rating-select label {
+        cursor: pointer;
+        font-size: 1.5rem;
+    }
+
+    .rating-select input:checked + .star,
+    .rating-select .star:hover {
+        color: #B30000;
+    }
+
+
+    .review-entry {
+        background: #f9f9f9;
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 10px;
+    }
+
+    .star-rating {
+        color: #ffc107;
+        font-size: 1.1rem;
+    }
 </style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const stars = document.querySelectorAll(".rating-select .star");
+        stars.forEach(star => {
+            star.addEventListener("click", () => {
+                stars.forEach(s => s.classList.remove("selected"));
+                star.classList.add("selected");
+            });
+        });
+    });
+</script>

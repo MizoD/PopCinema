@@ -5,85 +5,97 @@
         <ol class="breadcrumb mb-4">
             <li class="breadcrumb-item active">Dashboard</li>
         </ol>
-        <div class="row">
+        <div class="row g-4">
             <div class="col-xl-3 col-md-6">
-                <div class="card bg-primary text-white mb-4">
-                    <div class="card-header">Movies</div>
-                    <div class="card-body">@Model.MoviesCount</div>
+                <div class="card text-white mb-4 bg-movie custom-dashboard-card">
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                        🎥 Movies <i class="fas fa-film"></i>
+                    </div>
+                    <div class="card-body display-5 fw-bold">@Model.MoviesCount</div>
                     <div class="card-footer d-flex align-items-center justify-content-between">
-                        <a class="small text-white stretched-link" href="/Admin/Movie/Index">View Details</a>
+                        <a class="small text-white stretched-link fw-semibold" href="/Admin/Movie/Index">View Details</a>
                         <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                     </div>
                 </div>
             </div>
+
             <div class="col-xl-3 col-md-6">
-                <div class="card bg-warning text-white mb-4">
-                    <div class="card-header">ShowTimes</div>
-                    <div class="card-body">@Model.ShowTimesCount</div>
+                <div class="card text-white mb-4 bg-showtime custom-dashboard-card">
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                        ⏰ ShowTimes <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="card-body display-5 fw-bold">@Model.ShowTimesCount</div>
                     <div class="card-footer d-flex align-items-center justify-content-between">
-                        <a class="small text-white stretched-link" href="/Admin/ShowTime/Index">View Details</a>
+                        <a class="small text-white stretched-link fw-semibold" href="/Admin/ShowTime/Index">View Details</a>
                         <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                     </div>
                 </div>
             </div>
+
             <div class="col-xl-3 col-md-6">
-                <div class="card bg-success text-white mb-4">
-                    <div class="card-header">Bookings</div>
-                    <div class="card-body">@Model.Bookings.Count()</div>
+                <div class="card text-white mb-4 bg-booking custom-dashboard-card">
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                        📖 Bookings <i class="fas fa-ticket-alt"></i>
+                    </div>
+                    <div class="card-body display-5 fw-bold">@Model.Bookings.Count()</div>
                     <div class="card-footer d-flex align-items-center justify-content-between">
-                        <a class="small text-white stretched-link" href="/Admin/Booking/Index">View Details</a>
+                        <a class="small text-white stretched-link fw-semibold" href="/Admin/Booking/Index">View Details</a>
                         <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                     </div>
                 </div>
             </div>
+
             <div class="col-xl-3 col-md-6">
-                <div class="card bg-danger text-white mb-4">
-                    <div class="card-header">Actors</div>
-                    <div class="card-body">@Model.ActorsCount</div>
+                <div class="card text-white mb-4 bg-actor custom-dashboard-card">
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                        🎭 Actors <i class="fas fa-user"></i>
+                    </div>
+                    <div class="card-body display-5 fw-bold">@Model.ActorsCount</div>
                     <div class="card-footer d-flex align-items-center justify-content-between">
-                        <a class="small text-white stretched-link" href="/Admin/Actor/Index">View Details</a>
+                        <a class="small text-white stretched-link fw-semibold" href="/Admin/Actor/Index">View Details</a>
                         <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                     </div>
                 </div>
             </div>
+
             <div class="col-xl-3 col-md-6">
-                <div class="card bg-danger text-white mb-4">
-                    <div class="card-header">Directors</div>
-                    <div class="card-body">@Model.DirectorsCount</div>
+                <div class="card text-white mb-4 bg-director custom-dashboard-card">
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                        🎬 Directors <i class="fas fa-video"></i>
+                    </div>
+                    <div class="card-body display-5 fw-bold">@Model.DirectorsCount</div>
                     <div class="card-footer d-flex align-items-center justify-content-between">
-                        <a class="small text-white stretched-link" href="/Admin/Director/Index">View Details</a>
+                        <a class="small text-white stretched-link fw-semibold" href="/Admin/Director/Index">View Details</a>
                         <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                     </div>
                 </div>
             </div>
         </div>
+
         <div class="row">
             <div class="col-xl-6">
-                <div class="card mb-4">
-                    @* <div class="card-header"> *@
-                    @*     <i class="fas fa-chart-area me-1"></i> *@
-                    @*     Area Chart Example *@
-                    @* </div> *@
-                    @* <div class="card-body"><canvas id="myAreaChart" width="100%" height="40"></canvas></div> *@
+                <div class="card mb-4 chart-card">
+                    <div class="card-header"><i class="fas fa-chart-area me-1"></i> Entity Overview (Area)</div>
+                    <div class="card-body"><canvas id="areaChart"></canvas></div>
                 </div>
             </div>
             <div class="col-xl-6">
-                <div class="card mb-4">
-                    @* <div class="card-header"> *@
-                    @*     <i class="fas fa-chart-bar me-1"></i> *@
-                    @*     Bar Chart Example *@
-                    @* </div> *@
-                    @* <div class="card-body"><canvas id="myBarChart" width="100%" height="40"></canvas></div> *@
+                <div class="card mb-4 chart-card">
+                    <div class="card-header"><i class="fas fa-chart-bar me-1"></i> Entity Count (Bar)</div>
+                    <div class="card-body"><canvas id="barChart"></canvas></div>
                 </div>
             </div>
         </div>
-        <div class="card mb-4">
+
+
+
+        <div class="card text-bg-danger mb-4 custom-dashboard-card">
             <div class="card-header">
                 <i class="fas fa-table me-1"></i>
                 All Bookings Made
             </div>
             <div class="card-body">
-                <table id="datatablesSimple">
+                <table id="datatablesSimple" class="table table-striped table-hover align-middle text-center border shadow-sm animated-table">
                     <thead>
                         <tr>
                             <th>
@@ -142,19 +154,14 @@
                                     @Html.DisplayFor(modelItem => item.TotalPrice)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.CinemaHall.Id)
+                                    @Html.DisplayFor(modelItem => item.CinemaHall.Name)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.ShowTime.Id)
+                                    @Html.DisplayFor(modelItem => item.ShowTime.StartTime)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Promotion.Id)
+                                    @Html.DisplayFor(modelItem => item.Promotion.Code)
                                 </td>
-                                @* <td> *@
-                                @*     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> | *@
-                                @*     <a asp-action="Details" asp-route-id="@item.Id">Details</a> | *@
-                                @*     <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> *@
-                                @* </td> *@
                             </tr>
                         }
                         
@@ -164,3 +171,182 @@
         </div>
     </div>
 </main>
+
+<style>
+    .custom-dashboard-card {
+        border-radius: 12px;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .custom-dashboard-card:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .custom-dashboard-card .card-header {
+            font-size: 1.2rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .custom-dashboard-card .card-body {
+            font-size: 2.2rem;
+            text-align: center;
+        }
+
+        .custom-dashboard-card .card-footer a:hover {
+            text-decoration: underline;
+            color: #fff !important;
+        }
+
+    /* Custom card colors */
+    .bg-movie {
+        background-color: #007bff;
+    }
+    /* Blue */
+    .bg-showtime {
+        background-color: #ffc107;
+    }
+    /* Yellow */
+    .bg-booking {
+        background-color: #28a745;
+    }
+    /* Green */
+    .bg-actor {
+        background-color: #dc3545;
+    }
+    /* Red */
+    .bg-director {
+        background-color: #6610f2;
+    }
+    /* Indigo */
+    .chart-card {
+        border-left: 6px solid #B30000;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+        overflow: hidden;
+        box-shadow: 0 6px 12px rgba(179, 0, 0, 0.15);
+    }
+
+        .chart-card:hover {
+            transform: translateY(-5px) scale(1.01);
+            box-shadow: 0 12px 24px rgba(179, 0, 0, 0.25);
+        }
+
+        .chart-card .card-header {
+            background: linear-gradient(to right, #B30000, #6610f2);
+            color: #fff;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .chart-card .card-body {
+            padding: 1rem 1.5rem;
+            background-color: white;
+        }
+
+    .animated-table {
+        border-radius: 12px;
+        overflow: hidden;
+        transition: box-shadow 0.3s ease;
+    }
+
+        .animated-table:hover {
+            box-shadow: 0 12px 24px rgba(179, 0, 0, 0.2);
+        }
+
+        .animated-table th {
+            background-color: #B30000;
+            color: white;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .animated-table td {
+            vertical-align: middle;
+            transition: background-color 0.2s ease;
+        }
+
+        .animated-table tbody tr:hover {
+            background-color: rgba(255, 235, 235, 0.5);
+        }
+</style>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const labels = ["Movies", "ShowTimes", "Bookings", "Actors", "Directors"];
+        const dataCounts = [
+        @Model.MoviesCount,
+        @Model.ShowTimesCount,
+        @Model.Bookings.Count(),
+        @Model.ActorsCount,
+        @Model.DirectorsCount
+        ];
+
+        // Area Chart
+        new Chart(document.getElementById("areaChart"), {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Entity Count',
+                    data: dataCounts,
+                    fill: true,
+                    backgroundColor: "rgba(179, 0, 0, 0.2)",
+                    borderColor: "#B30000",
+                    tension: 0.3
+                }]
+            },
+            options: {
+                responsive: true,
+                animation: {
+                    duration: 1500,
+                    easing: 'easeOutBounce'
+                },
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+
+        // Bar Chart
+        new Chart(document.getElementById("barChart"), {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Total Count',
+                    data: dataCounts,
+                    backgroundColor: [
+                        '#007bff',
+                        '#ffc107',
+                        '#28a745',
+                        '#dc3545',
+                        '#6610f2'
+                    ],
+                    borderRadius: 5
+                }]
+            },
+            options: {
+                responsive: true,
+                animation: {
+                    duration: 1500,
+                    easing: 'easeOutBounce'
+                },
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+    </script>
+}
+
+

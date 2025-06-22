@@ -17,6 +17,8 @@ namespace PopCinema.Data
         public DbSet<Payment> Payments { set; get; }
         public DbSet<CinemaHall> CinemaHalls { set; get; }
         public DbSet<ShowTime> ShowTimes { set; get; }
+        public DbSet<Review> Reviews { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);

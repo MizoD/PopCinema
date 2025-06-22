@@ -529,3 +529,90 @@ body {
         pointer-events: none;
         cursor: not-allowed;
     }
+/* Decorations Container */
+#svg-decor-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: -1;
+    overflow: hidden;
+}
+
+/* General SVG Decorations */
+.decor-svg {
+    position: absolute;
+    opacity: 0.5;
+    transform-origin: center;
+}
+
+/* Blob Styles */
+.blob1 {
+    width: 300px;
+    height: 300px;
+    top: -80px;
+    right: -80px;
+    animation: floatBlob1 30s ease-in-out infinite alternate;
+}
+
+.blob2 {
+    width: 300px;
+    height: 300px;
+    bottom: -80px;
+    left: -80px;
+    animation: floatBlob2 35s ease-in-out infinite alternate;
+}
+
+/* Dots Pattern */
+.dots {
+    width: 200px;
+    height: 200px;
+    top: 40%;
+    left: 20%;
+    opacity: 0.1;
+    animation: fadeDots 20s infinite alternate ease-in-out;
+}
+
+/* Wave Background */
+.wave {
+    width: 100%;
+    height: auto;
+    bottom: 0;
+    left: 0;
+}
+
+/* Animations */
+@keyframes floatBlob1 {
+    0% {
+        transform: translate(0, 0) scale(1);
+    }
+
+    100% {
+        transform: translate(20px, 10px) scale(1.05);
+    }
+}
+
+@keyframes floatBlob2 {
+    0% {
+        transform: translate(0, 0) scale(1);
+    }
+
+    100% {
+        transform: translate(-20px, -10px) scale(1.08);
+    }
+}
+
+@keyframes fadeDots {
+    0% {
+        opacity: 0.05;
+        transform: scale(1);
+    }
+
+    100% {
+        opacity: 0.12;
+        transform: scale(1.05);
+    }
+}
+
