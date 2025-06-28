@@ -78,6 +78,11 @@ namespace PopCinema.Areas.Clients.Controllers
 
             if (!ModelState.IsValid)
             {
+                foreach (var entry in ModelState)
+                {
+                    Console.WriteLine($"{entry.Key} - {entry.Value?.Errors.FirstOrDefault()?.ErrorMessage}");
+                }
+
                 TempData["Error"] = "Please fill in all fields correctly.";
                 return RedirectToAction("Details", new { id = review.MovieId });
             }
@@ -89,6 +94,7 @@ namespace PopCinema.Areas.Clients.Controllers
             _context.Reviews.Add(review);
             _context.SaveChanges();
 
+            TempData["Success"] = "Review submitted successfully!";
             return RedirectToAction("Details", new { id = review.MovieId });
         }
 

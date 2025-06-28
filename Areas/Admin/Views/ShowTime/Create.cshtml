@@ -1,0 +1,66 @@
+﻿@model MoviesWithCinemasVM
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container py-5 animate__animated animate__fadeIn">
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+            <h2 class="text-danger fw-bold mb-4">🎬 Create Showtime</h2>
+
+            <form asp-action="Create" method="post" class="row g-3">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="col-md-6">
+                    <label asp-for="ShowTime.StartTime" class="form-label fw-semibold">🕒 Start Time</label>
+                    <input asp-for="ShowTime.StartTime" type="datetime-local" class="form-control"
+                           value="@Model.ShowTime.StartTime.ToString("yyyy-MM-ddTHH:mm")" required />
+                    <span asp-validation-for="ShowTime.StartTime" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="ShowTime.EndTime" class="form-label fw-semibold">🕔 End Time</label>
+                    <input asp-for="ShowTime.EndTime" type="datetime-local" class="form-control"
+                           value="@Model.ShowTime.EndTime.ToString("yyyy-MM-ddTHH:mm")" required/>
+                    <span asp-validation-for="ShowTime.EndTime" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="ShowTime.TicketPrice" class="form-label fw-semibold">💵 Ticket Price</label>
+                    <input asp-for="ShowTime.TicketPrice" class="form-control" required />
+                    <span asp-validation-for="ShowTime.TicketPrice" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="ShowTime.MovieId" class="form-label fw-semibold">🎞️ Select Movie</label>
+                    <select asp-for="ShowTime.MovieId" class="form-select" asp-items="Model.Movies" required>
+                        <option value="">-- Select Movie --</option>
+                    </select>
+                    <span asp-validation-for="ShowTime.MovieId" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="ShowTime.CinemaHallId" class="form-label fw-semibold">🏢 Select Cinema Hall</label>
+                    <select asp-for="ShowTime.CinemaHallId" class="form-select" asp-items="Model.CinemaHalls" required>
+                        <option value="">-- Select Hall --</option>
+                    </select>
+                    <span asp-validation-for="ShowTime.CinemaHallId" class="text-danger"></span>
+                </div>
+
+                <div class="col-12">
+                    <button type="submit" class="btn btn-outline-danger px-4">Create Showtime</button>
+                    <a asp-action="Index" class="btn btn-secondary ms-2">Back to List</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"></script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

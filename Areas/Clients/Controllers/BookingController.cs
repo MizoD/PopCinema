@@ -30,7 +30,7 @@ namespace PopCinema.Areas.Clients.Controllers
 
             var vm = new BookingVM
             {
-                ShowTimes = movie.ShowTimes.OrderBy(st => st.StartTime).ToList(),
+                ShowTimes = movie.ShowTimes.Where(e=> e.EndTime > DateTime.Now).OrderBy(st => st.StartTime).ToList(),
                 ShowTimeId = defaultShowtime.Id,
                 MovieTitle = movie.Title,
                 CinemaHallId = defaultShowtime.CinemaHallId,

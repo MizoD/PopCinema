@@ -27,7 +27,7 @@ public class HomeController : Controller
         var actors = _context.Actors;
         var directors = _context.Directors;
 
-        ActorsWithDirectorsVM actorsWithDirectors = new ( actors.ToList(),directors.ToList() );
+        ActorsWithDirectorsVM actorsWithDirectors = new ActorsWithDirectorsVM {Actors = actors.ToList(), Directors = directors.ToList()};
         return View(actorsWithDirectors);
     }
 

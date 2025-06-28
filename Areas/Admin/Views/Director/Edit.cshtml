@@ -1,0 +1,188 @@
+﻿@model Director
+
+@{
+    ViewData["Title"] = "Edit Director";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="form-container fade-in-up">
+    <h2 class="form-title">🎬 Edit Director</h2>
+    <form asp-action="Edit" method="post" enctype="multipart/form-data" class="styled-form">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="PhotoUrl" />
+
+        <div class="form-group floating-label">
+            <input asp-for="FullName" class="form-control" placeholder=" " />
+            <label asp-for="FullName">Full Name</label>
+            <span asp-validation-for="FullName" class="text-danger"></span>
+        </div>
+
+        <div class="form-group floating-label">
+            <textarea asp-for="Bio" class="form-control" rows="3" placeholder=" "></textarea>
+            <label asp-for="Bio">Biography</label>
+            <span asp-validation-for="Bio" class="text-danger"></span>
+        </div>
+
+        <div class="form-group floating-label">
+            <input asp-for="PhoneNumber" class="form-control" placeholder=" " />
+            <label asp-for="PhoneNumber">Phone Number</label>
+            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label fw-semibold">Current Photo</label><br />
+            @if (!string.IsNullOrEmpty(Model.PhotoUrl))
+            {
+                <img src="@Url.Content(Model.PhotoUrl)" id="currentPhoto" class="rounded shadow-sm mb-3" style="max-height: 150px;" />
+            }
+        </div>
+
+        <div class="form-group">
+            <label for="photo">Upload New Photo</label>
+            <input type="file" name="photo" id="photo" class="form-control" accept="image/*" onchange="previewImage(event)" />
+            <div class="image-preview-container">
+                <img id="imagePreview" src="#" alt="Image Preview" style="display:none;" />
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn-save">💾 Save Changes</button>
+            <a asp-action="Index" class="btn-back">← Back</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        function previewImage(event) {
+        const input = event.target;
+        const preview = document.getElementById('imagePreview');
+        const file = input.files[0];
+
+        if (file && file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+        preview.src = e.target.result;
+        preview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+        } else {
+        preview.src = "#";
+        preview.style.display = 'none';
+        }
+        }
+    </script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+<style>
+    .form-container {
+        max-width: 600px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+        animation: fadeInUp 0.8s ease forwards;
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    @@keyframes fadeInUp {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .form-title {
+        text-align: center;
+        color: #b30000;
+        margin-bottom: 1.5rem;
+        font-weight: 700;
+    }
+
+    .floating-label {
+        position: relative;
+        margin-bottom: 1.5rem;
+    }
+
+        .floating-label input,
+        .floating-label textarea {
+            width: 100%;
+            padding: 1rem 0.75rem 0.25rem;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background: transparent;
+            outline: none;
+        }
+
+        .floating-label label {
+            position: absolute;
+            top: 1rem;
+            left: 0.75rem;
+            background: white;
+            padding: 0 5px;
+            color: #aaa;
+            transition: 0.3s;
+            pointer-events: none;
+        }
+
+        .floating-label input:focus + label,
+        .floating-label input:not(:placeholder-shown) + label,
+        .floating-label textarea:focus + label,
+        .floating-label textarea:not(:placeholder-shown) + label {
+            top: -0.6rem;
+            left: 0.6rem;
+            font-size: 0.75rem;
+            color: #b30000;
+        }
+
+    .image-preview-container {
+        margin-top: 1rem;
+        text-align: center;
+    }
+
+    #imagePreview {
+        max-width: 100%;
+        max-height: 250px;
+        border-radius: 12px;
+        box-shadow: 0 0 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .form-actions {
+        margin-top: 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .btn-save {
+        background-color: #b30000;
+        color: white;
+        border: none;
+        padding: 0.6rem 1.5rem;
+        border-radius: 12px;
+        font-weight: bold;
+        transition: background 0.3s ease;
+    }
+
+        .btn-save:hover {
+            background-color: #800000;
+        }
+
+    .btn-back {
+        color: #555;
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.3s ease;
+    }
+
+        .btn-back:hover {
+            color: #b30000;
+        }
+</style>

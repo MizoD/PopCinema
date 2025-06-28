@@ -110,23 +110,25 @@
                     {
                         <div class="alert alert-success">@TempData["Success"]</div>
                     }
-                    <form asp-area="Clients" asp-controller="Movies" asp-action="AddReview" method="post" class="review-form mt-3">
+                    <form asp-action="AddReview" method="post" class="review-form mt-3">
                         <input type="hidden" name="MovieId" value="@Model.Id" />
+
                         <div class="mb-2">
                             <input type="text" name="ReviewerName" class="form-control" placeholder="Your Name" required />
                         </div>
+
                         <div class="mb-3">
                             <textarea name="Comment" class="form-control" rows="3" placeholder="Write your review..." required></textarea>
                         </div>
-                        <div class="mb-3 rating-select">
+
+                        <div class="mb-3 d-flex gap-1">
                             @for (int i = 1; i <= 5; i++)
                             {
-                                <label>
-                                    <input type="radio" name="Rating" value="@i" required hidden />
-                                    <span class="star">☆</span>
-                                </label>
+                                <input type="radio" id="star@i" name="Rating" value="@i" hidden />
+                                <label for="star@i" class="star" style="font-size: 1.5rem; cursor: pointer;">★</label>
                             }
                         </div>
+
                         <button type="submit" class="btn btn-outline-danger">Submit Review</button>
                     </form>
 
@@ -252,6 +254,15 @@
     .star-rating {
         color: #ffc107;
         font-size: 1.1rem;
+    }
+
+    .star {
+        color: #ccc;
+        transition: color 0.2s;
+    }
+
+    input[type="radio"]:checked + label {
+        color: gold;
     }
 </style>
 
