@@ -30,7 +30,7 @@
 
         <div class="form-group">
             <label for="photoFile">Upload Actor Photo</label>
-            <input type="file" name="photoFile" asp-for="ph" class="form-control" accept="image/*" onchange="previewImage(event)" />
+            <input type="file" name="photoFile" id="photoFile" class="form-control" accept="image/*" onchange="previewImage(event)" />
             <div class="image-preview-container">
                 <img id="imagePreview" src="#" alt="Image Preview" style="display:none;" />
             </div>

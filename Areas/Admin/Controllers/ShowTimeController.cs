@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PopCinema.Models.MovieM;
 using PopCinema.ViewModels;
+using System.Threading.Tasks;
 
 namespace PopCinema.Areas.Admin.Controllers
 {
@@ -10,18 +11,22 @@ namespace PopCinema.Areas.Admin.Controllers
     public class ShowTimeController : Controller
     {
         ApplicationDbContext _context = new();
-        public IActionResult Index(int page = 1)
+        IShowTimeRepository showTimeRepository;
+
+        public ShowTimeController(IShowTimeRepository showTimeRepository)
+        {
+            this.showTimeRepository = showTimeRepository;
+        }
+
+        public async Task<IActionResult> Index(int page = 1)
         {
             const int pageSize = 9;
-            IQueryable<ShowTime> showtimes = _context.ShowTimes
-                .Include(s => s.Movie)
-                .Include(s => s.CinemaHall);
+            IQueryable<ShowTime> showtimes = (IQueryable<ShowTime>)await showTimeRepository.GetAsync();
 
             int totalShowTimes = showtimes.Count();
 
-            showtimes = showtimes.OrderBy(s => s.StartTime)
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize);
+            showtimes = showtimes.OrderBy(s=> s.StartTime).Skip((page - 1) * pageSize)
+                                 .Take(pageSize);
 
             ShowTimesVM vm = new ShowTimesVM { ShowTimes = showtimes.ToList(), CurrentPage = page, TotalPages = (int)Math.Ceiling((double)totalShowTimes / pageSize) };
 
@@ -53,7 +58,7 @@ namespace PopCinema.Areas.Admin.Controllers
             return View(vm);
         }
         [HttpPost]
-        public IActionResult Create(MoviesWithCinemasVM vm)
+        public async Task<IActionResult> Create(MoviesWithCinemasVM vm)
         {
             if (!ModelState.IsValid)
             {
@@ -86,14 +91,14 @@ namespace PopCinema.Areas.Admin.Controllers
                 };
                 return View(vm);
             }
-            _context.ShowTimes.Add(vm.ShowTime);
-            _context.SaveChanges();
+
+            await showTimeRepository.CreateAsync(vm.ShowTime);
 
             return RedirectToAction("Index");
         }
-        public IActionResult Edit(int Id)
+        public async Task<IActionResult> Edit(int Id)
         {
-            var showtime = _context.ShowTimes.Include(s=> s.CinemaHall).Include(s=> s.Movie).FirstOrDefault(s=> s.Id == Id);
+            var showtime = await showTimeRepository.GetOneAsync(include: s=> s.Include(s=> s.CinemaHall).Include(s=> s.Movie));
             if (showtime is null) return NotFound();
             MoviesWithCinemasVM vm = new MoviesWithCinemasVM
             {
@@ -113,7 +118,7 @@ namespace PopCinema.Areas.Admin.Controllers
             return View(vm);
         }
         [HttpPost]
-        public IActionResult Edit(MoviesWithCinemasVM vm)
+        public async Task<IActionResult> Edit(MoviesWithCinemasVM vm)
         {
             if (!ModelState.IsValid)
             {
@@ -146,15 +151,14 @@ namespace PopCinema.Areas.Admin.Controllers
                 };
                 return View(vm);
             }
-            _context.ShowTimes.Update(vm.ShowTime);
-            _context.SaveChanges();
+            await showTimeRepository.UpdateAsync(vm.ShowTime);
 
             return RedirectToAction("Index");
         }
 
-        public IActionResult Delete(int Id)
+        public async Task<IActionResult> Delete(int Id)
         {
-            var showtime = _context.ShowTimes.Include(s=> s.Bookings).FirstOrDefault(s=> s.Id == Id);
+            var showtime = await showTimeRepository.GetOneAsync(include: s=> s.Include(s=> s.Bookings));
             if (showtime is null) return NotFound();
 
             if (showtime.Bookings != null && showtime.Bookings.Any())
@@ -162,7 +166,7 @@ namespace PopCinema.Areas.Admin.Controllers
                 _context.Bookings.RemoveRange(showtime.Bookings);
             }
             _context.ShowTimes.Remove(showtime);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return RedirectToAction("Index");
         }

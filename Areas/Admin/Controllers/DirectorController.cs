@@ -11,11 +11,11 @@ namespace PopCinema.Areas.Admin.Controllers
         {
             const int pageSize = 9;
             IQueryable<Director> directors = _context.Directors.Include(a => a.Movies);
-            int totalActors = directors.Count();
+            int totalDirectors = directors.Count();
 
             directors = directors.Skip((page - 1) * pageSize)
                 .Take(pageSize);
-            ActorsWithDirectorsVM vm = new ActorsWithDirectorsVM { Directors = directors.ToList(), CurrentPage = page, TotalPages = (int)Math.Ceiling((double)totalActors / pageSize) };
+            ActorsWithDirectorsVM vm = new ActorsWithDirectorsVM { Directors = directors.ToList(), CurrentPage = page, TotalPages = (int)Math.Ceiling((double)totalDirectors / pageSize) };
             return View(vm);
         }
 
@@ -29,15 +29,14 @@ namespace PopCinema.Areas.Admin.Controllers
         {
             if (photoFile != null && photoFile.Length > 0)
             {
-                // Save to wwwroot/images/Actors or another path
                 var fileName = Guid.NewGuid().ToString() + Path.GetExtension(photoFile.FileName);
-                var savePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\assets\\admin", fileName);
-                using (var stream = new FileStream(savePath, FileMode.Create))
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\assets\\admin", fileName);
+                using (var stream = new FileStream(filePath, FileMode.Create))
                 {
                     await photoFile.CopyToAsync(stream);
                 }
 
-                director.PhotoUrl = "\\assets\\admin\\" + fileName;
+                director.PhotoUrl = filePath;
             }
 
             if (ModelState.IsValid)
@@ -89,7 +88,7 @@ namespace PopCinema.Areas.Admin.Controllers
                     }
 
                     // Update Img in DB
-                    director.PhotoUrl = "\\assets\\admin\\" + fileName;
+                    director.PhotoUrl = filePath;
                 }
                 else
                 {
@@ -109,10 +108,10 @@ namespace PopCinema.Areas.Admin.Controllers
             var director = _context.Directors.Include(a => a.Movies).FirstOrDefault(s => s.Id == Id);
             if (director is null) return NotFound();
 
-            var oldFilePath = Path.Combine(Directory.GetCurrentDirectory(), director.PhotoUrl);
-            if (System.IO.File.Exists(oldFilePath))
+            
+            if (System.IO.File.Exists(director.PhotoUrl))
             {
-                System.IO.File.Delete(oldFilePath);
+                System.IO.File.Delete(director.PhotoUrl);
             }
 
             _context.Directors.Remove(director);

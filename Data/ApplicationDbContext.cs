@@ -7,6 +7,10 @@ namespace PopCinema.Data
 {
     public class ApplicationDbContext : DbContext
     {
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+            : base(options)
+        {
+        }
         public DbSet<Movie> Movies { set; get; }
         public DbSet<Actor> Actors { set; get; }
         public DbSet<Genre> Genres { set; get; }
@@ -20,6 +24,9 @@ namespace PopCinema.Data
         public DbSet<Review> Reviews { get; set; }
         public DbSet<ActorMovie> MovieActors { set; get; }
 
+        public ApplicationDbContext()
+        {
+        }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);

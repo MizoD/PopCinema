@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+
 namespace PopCinema
 {
     public class Program
@@ -8,6 +10,14 @@ namespace PopCinema
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+                    options.UseSqlServer("Data Source=.;Initial Catalog=PopCinema; Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;"));
+
+            builder.Services.AddScoped<IMovieRepository, MovieRepository>();
+            //builder.Services.AddScoped<IActorRepository, ActorRepository>();
+            //builder.Services.AddScoped<IDirectorRepository, DirectorRepository>();
+            //builder.Services.AddScoped<IShowTimeRepository, ShowTimeRepository>();
+            //builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 
             var app = builder.Build();
 
