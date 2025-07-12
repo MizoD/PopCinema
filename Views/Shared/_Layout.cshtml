@@ -17,12 +17,32 @@
                 </a>
             </div>
             <nav>
-                <ul class="nav-links">
+                <ul class="nav-links d-flex flex-grow-1">
                     <li><a href="/Clients/Home/Index">Home</a></li>
                     <li><a href="/Clients/Movies/Index">Movies</a></li>
                     <li><a href="/Clients/Home/Actors">Actors</a></li>
                 </ul>
             </nav>
+            @using System.Security.Claims
+            @{
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            }
+
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+
+                @if (User is not null && User.Identity.IsAuthenticated)
+                {
+
+                    <li class="nav-item"><a class="nav-link" href="/Identity/Account/SignOut">Logout</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/Identity/Profile/Index/@userId">Welcome @User.Identity.Name</a></li>
+                }
+                else
+                {
+                    <li class="nav-item"><a class="nav-link" href="/Identity/Account/Login">Login</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/Identity/Account/Register">Register</a></li>
+                }
+
+            </ul>   
             <form class="search-bar" method="get" action="/Clients/Movies/Search">
                 <input type="text" name="query" placeholder="Search movies..." />
                 <button type="submit">🔍</button>

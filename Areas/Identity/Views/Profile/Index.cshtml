@@ -1,0 +1,123 @@
+﻿@model ApplicationUser
+
+@{
+    ViewData["Title"] = "My Profile";
+}
+
+<!-- Custom CSS for PopCinema Styling -->
+<style>
+    .profile-wrapper {
+        background-color: #fff;
+        color: #000000;
+        border-radius: 2rem;
+        padding: 2.5rem;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+        animation: fadeIn 0.6s ease-in-out;
+    }
+
+    @@keyframes fadeIn {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .profile-title {
+        font-size: 2rem;
+        font-weight: 600;
+        color: #B30000;
+        border-bottom: 2px solid #444;
+        padding-bottom: 0.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .profile-row dt {
+        color: #bbb;
+        font-weight: 500;
+    }
+
+    .profile-row dd {
+        color: #B30000;
+        margin-bottom: 1rem;
+    }
+
+    .profile-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+        animation: fadeInUp 0.6s ease;
+    }
+
+    @@keyframes fadeInUp {
+        from
+
+    {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    }
+
+    .btn-orange {
+        background-color: #B30000;
+        color: white;
+        border: none;
+        padding: 0.5rem 1.75rem;
+        border-radius: 30px;
+        transition: all 0.3s ease;
+        text-decoration: none !important;
+    }
+
+        .btn-orange:hover {
+            background-color: #B30000;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 76, 41, 0.3);
+            text-decoration: none !important;
+        }
+</style>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="profile-wrapper">
+                <div class="profile-title text-center">👤 @Model.UserName Profile</div>
+
+                <dl class="row profile-row">
+                    <dt class="col-sm-4">First Name</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.FirstName)</dd>
+
+                    <dt class="col-sm-4">Last Name</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.LastName)</dd>
+
+                    <dt class="col-sm-4">Username</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.UserName)</dd>
+
+                    <dt class="col-sm-4">Email</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Email)</dd>
+
+                    <dt class="col-sm-4">Phone Number</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.PhoneNumber)</dd>
+
+                    <dt class="col-sm-4">Address</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Address)</dd>
+                </dl>
+
+                <div class="profile-actions mt-4">
+                    
+
+                    <a class="btn btn-orange" asp-action="Edit" asp-route-id="@Model?.Id">
+                        ✏️ Edit Profile
+                    </a>
+                    <a class="btn btn-orange" asp-controller="Home" asp-area="Clients" asp-action="Index">
+                        🎬 Back to Home
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

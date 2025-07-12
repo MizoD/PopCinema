@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace ECommerce514.Areas.Admin.Controllers
+namespace PopCinema.Areas.Admin.Controllers
 {
     [Area("Admin")]
     public class HomeController : Controller

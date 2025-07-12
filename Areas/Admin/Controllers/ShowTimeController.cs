@@ -21,14 +21,14 @@ namespace PopCinema.Areas.Admin.Controllers
         public async Task<IActionResult> Index(int page = 1)
         {
             const int pageSize = 9;
-            IQueryable<ShowTime> showtimes = (IQueryable<ShowTime>)await showTimeRepository.GetAsync();
+            var showtimes = (await showTimeRepository.GetAsync(include: s => s.Include(s => s.Movie).ThenInclude(m => m.ShowTimes).Include(s => s.CinemaHall))).ToList();
 
             int totalShowTimes = showtimes.Count();
 
             showtimes = showtimes.OrderBy(s=> s.StartTime).Skip((page - 1) * pageSize)
-                                 .Take(pageSize);
+                                 .Take(pageSize).ToList();
 
-            ShowTimesVM vm = new ShowTimesVM { ShowTimes = showtimes.ToList(), CurrentPage = page, TotalPages = (int)Math.Ceiling((double)totalShowTimes / pageSize) };
+            ShowTimesVM vm = new ShowTimesVM { ShowTimes = showtimes, CurrentPage = page, TotalPages = (int)Math.Ceiling((double)totalShowTimes / pageSize) };
 
             return View(vm);
         }

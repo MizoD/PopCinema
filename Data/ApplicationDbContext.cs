@@ -1,11 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using PopCinema.Models.CinemaM;
 using PopCinema.Models.MovieM;
 using PopCinema.Models.personM;
 
 namespace PopCinema.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -23,6 +24,7 @@ namespace PopCinema.Data
         public DbSet<ShowTime> ShowTimes { set; get; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<ActorMovie> MovieActors { set; get; }
+        public DbSet<ApplicationUserOTP> ApplicationUserOTPs { get; set; }
 
         public ApplicationDbContext()
         {
@@ -64,5 +66,6 @@ namespace PopCinema.Data
 
 
         }
+       
     }
 }

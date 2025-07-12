@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PopCinema.Data;
 
@@ -11,9 +12,11 @@ using PopCinema.Data;
 namespace PopCinema.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250704152935_addIdentity")]
+    partial class addIdentity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -569,40 +572,6 @@ namespace PopCinema.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("PopCinema.Models.personM.ApplicationUserOTP", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ApplicationUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("OTPNumber")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Reason")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("SendDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("Status")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("ValidTo")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
-
-                    b.ToTable("ApplicationUserOTPs");
-                });
-
             modelBuilder.Entity("PopCinema.Models.personM.Director", b =>
                 {
                     b.Property<int>("Id")
@@ -804,17 +773,6 @@ namespace PopCinema.Migrations
                     b.Navigation("CinemaHall");
 
                     b.Navigation("Movie");
-                });
-
-            modelBuilder.Entity("PopCinema.Models.personM.ApplicationUserOTP", b =>
-                {
-                    b.HasOne("PopCinema.Models.personM.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ApplicationUser");
                 });
 
             modelBuilder.Entity("PopCinema.Models.CinemaM.CinemaHall", b =>
