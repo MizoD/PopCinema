@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PopCinema.Models.MovieM;
+using PopCinema.Utility;
 using PopCinema.ViewModels;
 using System.Threading.Tasks;
 
@@ -32,7 +34,7 @@ namespace PopCinema.Areas.Admin.Controllers
 
             return View(vm);
         }
-
+        [Authorize(Roles = $"{SD.SuperAdmin},{SD.Admin}")]
         public IActionResult Create()
         {
             MoviesWithCinemasVM vm = new MoviesWithCinemasVM
@@ -58,6 +60,7 @@ namespace PopCinema.Areas.Admin.Controllers
             return View(vm);
         }
         [HttpPost]
+        [Authorize(Roles = $"{SD.SuperAdmin},{SD.Admin}")]
         public async Task<IActionResult> Create(MoviesWithCinemasVM vm)
         {
             if (!ModelState.IsValid)
@@ -96,6 +99,7 @@ namespace PopCinema.Areas.Admin.Controllers
 
             return RedirectToAction("Index");
         }
+        [Authorize(Roles = $"{SD.SuperAdmin},{SD.Admin}")]
         public async Task<IActionResult> Edit(int Id)
         {
             var showtime = await showTimeRepository.GetOneAsync(include: s=> s.Include(s=> s.CinemaHall).Include(s=> s.Movie));
@@ -118,6 +122,7 @@ namespace PopCinema.Areas.Admin.Controllers
             return View(vm);
         }
         [HttpPost]
+        [Authorize(Roles = $"{SD.SuperAdmin},{SD.Admin}")]
         public async Task<IActionResult> Edit(MoviesWithCinemasVM vm)
         {
             if (!ModelState.IsValid)
@@ -155,7 +160,7 @@ namespace PopCinema.Areas.Admin.Controllers
 
             return RedirectToAction("Index");
         }
-
+        [Authorize(Roles = $"{SD.SuperAdmin},{SD.Admin}")]
         public async Task<IActionResult> Delete(int Id)
         {
             var showtime = await showTimeRepository.GetOneAsync(include: s=> s.Include(s=> s.Bookings));

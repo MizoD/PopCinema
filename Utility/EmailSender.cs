@@ -12,11 +12,11 @@ namespace PopCinema.Utility
             {
                 EnableSsl = true,
                 UseDefaultCredentials = false,
-                Credentials = new NetworkCredential("mohamedashrafmahmoudgad@gmail.com", "qlxr eqsy uudg lyjn")
+                Credentials = new NetworkCredential("myuiprof@gmail.com", "qlxr eqsy uudg lyjn")
             };
 
             return client.SendMailAsync(
-                new MailMessage(from: "mohamedashrafmahmoudgad@gmail.com",
+                new MailMessage(from: "myuiprof@gmail.com",
                                 to: email,
                                 subject,
                                 htmlMessage

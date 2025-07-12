@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using PopCinema.Utility;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -25,7 +27,7 @@ namespace PopCinema.Areas.Admin.Controllers
             
             return View(movies);
         }
-
+        [Authorize(Roles = $"{SD.SuperAdmin},{SD.Admin}")]
         public async Task<IActionResult> Create()
         {
             var directors = await movieRepository.GetDirectorsSelectListAsync();
@@ -39,6 +41,7 @@ namespace PopCinema.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = $"{SD.SuperAdmin},{SD.Admin}")]
         public async Task<IActionResult> Create(Movie movie, IFormFile poster, List<int> SelectedActorIds)
         {
             
@@ -100,6 +103,7 @@ namespace PopCinema.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [Authorize(Roles = $"{SD.SuperAdmin},{SD.Admin}")]
         public async Task<IActionResult> Edit(int Id)
         {
             var movie = await movieRepository.GetOneAsync(m=> m.Id == Id, include: m => m.Include(m => m.Actors).ThenInclude(am => am.Actor));
@@ -128,6 +132,7 @@ namespace PopCinema.Areas.Admin.Controllers
     
 
         [HttpPost]
+        [Authorize(Roles = $"{SD.SuperAdmin},{SD.Admin}")]
         public async Task<IActionResult> Edit(Movie movie, IFormFile poster, List<int> selectedActorIds)
         {
             ModelState.Remove("PosterUrl");
@@ -192,7 +197,7 @@ namespace PopCinema.Areas.Admin.Controllers
             TempData["success-notification"] = "✅ Movie updated successfully!";
             return RedirectToAction(nameof(Index));
         }
-
+        [Authorize(Roles = $"{SD.SuperAdmin},{SD.Admin}")]
         public async Task<IActionResult> Delete(int id)
         {
             var movie = await movieRepository.GetOneAsync(m=> m.Id == id, include: m=> m.Include(m=> m.Actors).Include(m=> m.ShowTimes));

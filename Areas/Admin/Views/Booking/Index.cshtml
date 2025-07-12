@@ -7,7 +7,10 @@
 <div class="container py-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="fw-bold">🎟️ Booking Management</h2>
-        <a asp-action="Save" class="btn btn-danger rounded-pill px-4 shadow">+ Add Booking</a>
+        @if (User.IsInRole(SD.SuperAdmin) || User.IsInRole(SD.Admin))
+        {
+            <a asp-action="Save" class="btn btn-danger rounded-pill px-4 shadow">+ Add Booking</a>
+        }
     </div>
 
     <!-- 🔍 Search Bar -->
@@ -33,12 +36,15 @@
                         <p class="mb-1"><strong>💰 Total:</strong> @booking.TotalPrice.ToString("C")</p>
                         <p class="mb-0"><strong>🎁 Promo:</strong> @(booking.Promotion?.Description ?? "None")</p>
                     </div>
+                    @if (User.IsInRole(SD.SuperAdmin) || User.IsInRole(SD.Admin))
+                    {
                     <div class="card-footer bg-light border-0 d-flex justify-content-between px-4 py-3">
                         <a asp-action="Save" asp-route-id="@booking.Id" class="btn btn-sm btn-outline-warning rounded-pill px-3">✏️ Edit</a>
                         <button class="btn btn-outline-danger btn-sm rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#deleteModal" data-id="@booking.Id" data-name="Booking on @booking.BookingTime.ToShortDateString()">
                             🗑️ Delete
                         </button>
                     </div>
+                    }
                 </div>
             </div>
         }

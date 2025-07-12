@@ -29,8 +29,24 @@ namespace PopCinema.Areas.Identity.Controllers
         public async Task<IActionResult> Edit(ApplicationUser user)
         {
             var userDb = await _userManager.FindByIdAsync(user.Id);
-            if (user is null) return NotFound();
-            return View("Index");
+            if (userDb is null) return NotFound();
+            userDb.FirstName = user.FirstName;
+            userDb.LastName = user.LastName;
+            userDb.Email = user.Email;
+            userDb.UserName = user.UserName;
+            userDb.PhoneNumber = user.PhoneNumber;
+            userDb.Address = user.Address;
+
+            var result = await _userManager.UpdateAsync(userDb);
+            if (!result.Succeeded)
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+                return View(userDb);
+            }
+            return RedirectToAction("Index","Profile",new { area = "Identity" , userDb.Id });
         }
     }
 }

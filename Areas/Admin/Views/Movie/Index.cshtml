@@ -9,7 +9,10 @@
     <div class="header-bar">
         <h1>🎬 Movie Manager</h1>
         <div class="actions">
-            <a asp-action="Create" class="btn-create">➕ Add New Movie</a>
+            @if (User.IsInRole(SD.SuperAdmin) || User.IsInRole(SD.Admin))
+            {
+                <a asp-action="Create" class="btn-create">➕ Add New Movie</a>
+            }
             <input type="text" id="searchInput" placeholder="🔍 Search..." onkeyup="filterTable()" />
         </div>
     </div>
@@ -61,10 +64,13 @@
                         <td>@item.Director?.FullName</td>
                         <td>@item.Genre?.Name</td>
                         <td>@item.CinemaHall?.Name</td>
-                        <td>
-                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn mb-2 btn-warning">✏️</a>
-                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-delete">🗑️</a>
-                        </td>
+                        @if (User.IsInRole(SD.SuperAdmin) || User.IsInRole(SD.Admin))
+                        {
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn mb-2 btn-warning">✏️</a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-delete">🗑️</a>
+                            </td>
+                        }
                     </tr>
                 }
             </tbody>

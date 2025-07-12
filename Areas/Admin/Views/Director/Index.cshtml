@@ -8,7 +8,10 @@
 <div class="container py-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="fw-bold">🎬 Directors Management</h2>
-        <a asp-action="Create" class="btn btn-danger rounded-pill px-4 shadow">+ Add Director</a>
+        @if (User.IsInRole(SD.SuperAdmin) || User.IsInRole(SD.Admin))
+        {
+            <a asp-action="Create" class="btn btn-danger rounded-pill px-4 shadow">+ Add Director</a>
+        }
     </div>
 
     <!-- 🔍 Search Bar -->
@@ -31,6 +34,8 @@
                         </div>
                         <p class="text-muted small mb-0">@director.Bio</p>
                     </div>
+                    @if (User.IsInRole(SD.SuperAdmin) || User.IsInRole(SD.Admin))
+                    {
                     <div class="card-footer bg-light border-0 d-flex justify-content-between px-4 py-3">
                         <a asp-action="Edit" asp-route-id="@director.Id" class="btn btn-outline-primary btn-sm rounded-pill px-3">Edit</a>
 
@@ -38,6 +43,7 @@
                             Delete
                         </button>
                     </div>
+                    }
                 </div>
             </div>
         }

@@ -8,47 +8,52 @@
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
-    <header class="main-header">
-        <div class="container">
-            <div class="logo">
-                <a href="/Clients/Home/Index">
-                    <img src="/assets/EatPop.png" alt="Pop Cinema Logo" class="logo-img" />
+    <header class="main-header bg-danger py-3">
+        <div class="container d-flex align-items-center justify-content-between flex-wrap">
+            <!-- Logo -->
+            <div class="logo d-flex align-items-center">
+                <a href="/Clients/Home/Index" class="d-flex align-items-center text-white text-decoration-none fw-bold fs-4">
+                    <img src="/assets/EatPop.png" alt="Pop Cinema Logo" class="me-2" style="width: 40px; height: 40px;" />
                     Pop Cinema
                 </a>
             </div>
-            <nav>
-                <ul class="nav-links d-flex flex-grow-1">
-                    <li><a href="/Clients/Home/Index">Home</a></li>
-                    <li><a href="/Clients/Movies/Index">Movies</a></li>
-                    <li><a href="/Clients/Home/Actors">Actors</a></li>
+
+            <!-- Nav Links -->
+            <nav class="d-flex align-items-center flex-grow-1 justify-content-center">
+                <ul class="nav-links list-unstyled d-flex gap-4 mb-0">
+                    <li><a class="text-white nav-item-link" href="/Clients/Home/Index">Home</a></li>
+                    <li><a class="text-white nav-item-link" href="/Clients/Movies/Index">Movies</a></li>
+                    <li><a class="text-white nav-item-link" href="/Clients/Home/Actors">Actors</a></li>
                 </ul>
             </nav>
+
+            <!-- Auth Links -->
             @using System.Security.Claims
             @{
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             }
 
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-
-                @if (User is not null && User.Identity.IsAuthenticated)
+            <div class="d-flex align-items-center gap-3 auth-section me-3">
+                @if (User?.Identity?.IsAuthenticated ?? false)
                 {
-
-                    <li class="nav-item"><a class="nav-link" href="/Identity/Account/SignOut">Logout</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/Identity/Profile/Index/@userId">Welcome @User.Identity.Name</a></li>
+                    <a class="auth-link" asp-area="Identity" asp-controller="Profile" asp-action="Index" asp-route-userId="@userId">👋 Welcome @User.Identity.Name</a>
+                    <a class="auth-link" asp-area="Identity" asp-controller="Account" asp-action="SignOut">🚪 Logout</a>
                 }
                 else
                 {
-                    <li class="nav-item"><a class="nav-link" href="/Identity/Account/Login">Login</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/Identity/Account/Register">Register</a></li>
+                    <a class="auth-link" asp-area="Identity" asp-controller="Account" asp-action="Login">🔐 Login</a>
+                    <a class="auth-link" asp-area="Identity" asp-controller="Account" asp-action="Register">📝 Register</a>
                 }
+            </div>
 
-            </ul>   
-            <form class="search-bar" method="get" action="/Clients/Movies/Search">
-                <input type="text" name="query" placeholder="Search movies..." />
-                <button type="submit">🔍</button>
+            <!-- Search -->
+            <form class="search-bar d-flex" method="get" action="/Clients/Movies/Search">
+                <input type="text" name="query" class="form-control rounded-start" placeholder="Search movies..." />
+                <button class="btn btn-light rounded-end" type="submit">🔍</button>
             </form>
         </div>
     </header>
+
 
     @if (Context.Request.Path == "/Clients/Home/Index")
     {

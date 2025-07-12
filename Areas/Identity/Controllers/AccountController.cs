@@ -65,7 +65,7 @@ namespace PopCinema.Areas.Identity.Controllers
 
                 await _emailSender.SendEmailAsync(user!.Email ?? "", "Confirm Your Account", $"<h1>Confirm Your Account By Clicking <a href='{link}'>here</a></h1>");
 
-                return RedirectToAction("Index", "Home", new { area = "Customer" });
+                return RedirectToAction("Index", "Home", new { area = "Clients" });
             }
 
             foreach (var item in result.Errors)

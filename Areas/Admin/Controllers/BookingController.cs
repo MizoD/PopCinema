@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PopCinema.Models.personM;
+using PopCinema.Utility;
 using System.Threading.Tasks;
 
 namespace PopCinema.Areas.Admin.Controllers
@@ -29,6 +31,7 @@ namespace PopCinema.Areas.Admin.Controllers
             BookingPaginationVM vm = new BookingPaginationVM { Bookings = bookings.ToList(), CurrentPage = page, TotalPages = (int)Math.Ceiling((double)totalBookings / pageSize) };
             return View(vm);
         }
+        [Authorize(Roles = $"{SD.SuperAdmin},{SD.Admin}")]
         public async Task<IActionResult> Save(int Id)
         {
             var booking = await bookingRepository.GetOneAsync(b => b.Id == Id);
@@ -50,6 +53,7 @@ namespace PopCinema.Areas.Admin.Controllers
             return View(vm);
         }
         [HttpPost]
+        [Authorize(Roles = $"{SD.SuperAdmin},{SD.Admin}")]
         public async Task<IActionResult> Save(Booking booking)
         {
             ModelState.Remove("Booking.CinemaHall");
@@ -95,7 +99,7 @@ namespace PopCinema.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
 
-
+        [Authorize(Roles = $"{SD.SuperAdmin},{SD.Admin}")]
         public async Task<IActionResult> Delete(int Id)
         {
             var booking = await bookingRepository.GetOneAsync(b => b.Id == Id);

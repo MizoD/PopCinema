@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using PopCinema.Utility;
 
 namespace PopCinema.Areas.Admin.Controllers
 {
@@ -18,13 +20,14 @@ namespace PopCinema.Areas.Admin.Controllers
             ActorsWithDirectorsVM vm = new ActorsWithDirectorsVM { Directors = directors.ToList(), CurrentPage = page, TotalPages = (int)Math.Ceiling((double)totalDirectors / pageSize) };
             return View(vm);
         }
-
+        [Authorize(Roles = $"{SD.SuperAdmin},{SD.Admin}")]
         public IActionResult Create()
         {
             return View();
         }
 
         [HttpPost]
+        [Authorize(Roles = $"{SD.SuperAdmin},{SD.Admin}")]
         public async Task<IActionResult> Create(Director director, IFormFile photoFile)
         {
             if (photoFile != null && photoFile.Length > 0)
@@ -48,7 +51,7 @@ namespace PopCinema.Areas.Admin.Controllers
 
             return View(director);
         }
-
+        [Authorize(Roles = $"{SD.SuperAdmin},{SD.Admin}")]
         public IActionResult Edit(int Id)
         {
             var director = _context.Directors.Find(Id);
@@ -57,6 +60,7 @@ namespace PopCinema.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = $"{SD.SuperAdmin},{SD.Admin}")]
         public async Task<IActionResult> Edit(Director director, IFormFile photo)
         {
             ModelState.Remove("PhotoUrl");
@@ -102,7 +106,7 @@ namespace PopCinema.Areas.Admin.Controllers
             }
             return NotFound();
         }
-
+        [Authorize(Roles = $"{SD.SuperAdmin},{SD.Admin}")]
         public IActionResult Delete(int Id)
         {
             var director = _context.Directors.Include(a => a.Movies).FirstOrDefault(s => s.Id == Id);
