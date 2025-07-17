@@ -23,6 +23,7 @@ namespace PopCinema.Data
         public DbSet<CinemaHall> CinemaHalls { set; get; }
         public DbSet<ShowTime> ShowTimes { set; get; }
         public DbSet<Review> Reviews { get; set; }
+        public DbSet<Cart> Carts { get; set; }
         public DbSet<ActorMovie> MovieActors { set; get; }
         public DbSet<ApplicationUserOTP> ApplicationUserOTPs { get; set; }
 

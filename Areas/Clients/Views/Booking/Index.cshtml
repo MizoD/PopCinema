@@ -8,7 +8,7 @@
     <div class="left">
         <h1>🎟️ Book Tickets for @Model.MovieTitle</h1>
 
-        <form asp-action="Index" method="post" onsubmit="return validateSeats()" class="p-4 animated-form">
+        <form action="/Clients/Cart/AddToCart" method="post" onsubmit="return validateSeats()" class="p-4 animated-form">
             <!-- ShowTime Dropdown -->
             <div class="mb-3">
                 <label for="ShowTimeId" class="form-label">🎬 Select ShowTime</label>
@@ -25,8 +25,8 @@
 
             <!-- Seats Input -->
             <div class="mb-3">
-                <label for="NumberOfSeats" class="form-label">🎟️ Number of Seats</label>
-                <input type="number" class="form-control" id="NumberOfSeats" name="NumberOfSeats" min="1" required oninput="updateTotalPrice()" />
+                <label for="Count" class="form-label">🎟️ Number of Seats</label>
+                <input type="number" class="form-control" id="Count" name="Count" min="1" required oninput="updateTotalPrice()" />
                 <div id="seats-warning" class="text-danger mt-1" style="display:none;"></div>
             </div>
 
@@ -75,13 +75,13 @@
         }
 
         function updateTotalPrice() {
-            const seats = parseInt(document.getElementById("NumberOfSeats").value) || 0;
+            const seats = parseInt(document.getElementById("Count").value) || 0;
             const price = parseFloat(document.getElementById("TicketPrice").value) || 0;
             document.getElementById("totalPrice").innerText = `$${(seats * price).toFixed(2)}`;
         }
 
         function validateSeats() {
-            const requested = parseInt(document.getElementById("NumberOfSeats").value);
+            const requested = parseInt(document.getElementById("Count").value);
             const available = parseInt(document.getElementById("AvailableSeats").value);
             const warning = document.getElementById("seats-warning");
 
@@ -95,6 +95,7 @@
             return true;
         }
     </script>
+    <partial name="_ValidationScriptsPartial" />
 }
 
 

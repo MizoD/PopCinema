@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 namespace PopCinema.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = $"{SD.SuperAdmin},{SD.Admin}")]
     public class ShowTimeController : Controller
     {
         ApplicationDbContext _context = new();

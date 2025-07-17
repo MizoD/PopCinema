@@ -6,6 +6,7 @@ using PopCinema.Utility;
 namespace PopCinema.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = $"{SD.SuperAdmin},{SD.Admin}")]
     public class DirectorController : Controller
     {
         ApplicationDbContext _context = new();

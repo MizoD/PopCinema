@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PopCinema.Data;
 
@@ -11,9 +12,11 @@ using PopCinema.Data;
 namespace PopCinema.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250717135501_addCart")]
+    partial class addCart
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -197,7 +200,7 @@ namespace PopCinema.Migrations
 
                     b.HasIndex("ShowTimeId");
 
-                    b.ToTable("Bookings", (string)null);
+                    b.ToTable("Bookings");
                 });
 
             modelBuilder.Entity("PopCinema.Models.CinemaM.Cart", b =>
@@ -220,7 +223,7 @@ namespace PopCinema.Migrations
 
                     b.HasIndex("ShowTimeId");
 
-                    b.ToTable("Carts", (string)null);
+                    b.ToTable("Carts");
                 });
 
             modelBuilder.Entity("PopCinema.Models.CinemaM.CinemaHall", b =>
@@ -240,7 +243,7 @@ namespace PopCinema.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CinemaHalls", (string)null);
+                    b.ToTable("CinemaHalls");
                 });
 
             modelBuilder.Entity("PopCinema.Models.CinemaM.Payment", b =>
@@ -275,7 +278,7 @@ namespace PopCinema.Migrations
 
                     b.HasIndex("BookingId");
 
-                    b.ToTable("Payments", (string)null);
+                    b.ToTable("Payments");
                 });
 
             modelBuilder.Entity("PopCinema.Models.CinemaM.Promotion", b =>
@@ -308,7 +311,7 @@ namespace PopCinema.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Promotions", (string)null);
+                    b.ToTable("Promotions");
                 });
 
             modelBuilder.Entity("PopCinema.Models.CinemaM.Seat", b =>
@@ -333,7 +336,7 @@ namespace PopCinema.Migrations
 
                     b.HasIndex("CinemaHallId");
 
-                    b.ToTable("Seats", (string)null);
+                    b.ToTable("Seats");
                 });
 
             modelBuilder.Entity("PopCinema.Models.MovieM.ActorMovie", b =>
@@ -348,7 +351,7 @@ namespace PopCinema.Migrations
 
                     b.HasIndex("ActorId");
 
-                    b.ToTable("MovieActors", (string)null);
+                    b.ToTable("MovieActors");
                 });
 
             modelBuilder.Entity("PopCinema.Models.MovieM.Genre", b =>
@@ -365,7 +368,7 @@ namespace PopCinema.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Genres", (string)null);
+                    b.ToTable("Genres");
                 });
 
             modelBuilder.Entity("PopCinema.Models.MovieM.Movie", b =>
@@ -428,7 +431,7 @@ namespace PopCinema.Migrations
 
                     b.HasIndex("GenreId");
 
-                    b.ToTable("Movies", (string)null);
+                    b.ToTable("Movies");
                 });
 
             modelBuilder.Entity("PopCinema.Models.MovieM.Review", b =>
@@ -460,7 +463,7 @@ namespace PopCinema.Migrations
 
                     b.HasIndex("MovieId");
 
-                    b.ToTable("Reviews", (string)null);
+                    b.ToTable("Reviews");
                 });
 
             modelBuilder.Entity("PopCinema.Models.MovieM.ShowTime", b =>
@@ -492,7 +495,7 @@ namespace PopCinema.Migrations
 
                     b.HasIndex("MovieId");
 
-                    b.ToTable("ShowTimes", (string)null);
+                    b.ToTable("ShowTimes");
                 });
 
             modelBuilder.Entity("PopCinema.Models.personM.Actor", b =>
@@ -521,7 +524,7 @@ namespace PopCinema.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Actors", (string)null);
+                    b.ToTable("Actors");
                 });
 
             modelBuilder.Entity("PopCinema.Models.personM.ApplicationUser", b =>
@@ -631,7 +634,7 @@ namespace PopCinema.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.ToTable("ApplicationUserOTPs", (string)null);
+                    b.ToTable("ApplicationUserOTPs");
                 });
 
             modelBuilder.Entity("PopCinema.Models.personM.Director", b =>
@@ -660,7 +663,7 @@ namespace PopCinema.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Directors", (string)null);
+                    b.ToTable("Directors");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

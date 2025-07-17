@@ -57,7 +57,7 @@ namespace PopCinema.Areas.Identity.Controllers
                 await _userManager.AddToRoleAsync(user, SD.Customer);
 
                 // Success msg
-                TempData["success-notification"] = "Add User Successfully";
+                TempData["success-notification"] = "Create User Successfully";
 
                 // Send Confirmation Email
                 var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -239,7 +239,7 @@ namespace PopCinema.Areas.Identity.Controllers
 
                 TempData["success-notification"] = "Send OTP to your Email Successfully";
 
-                TempData["Redirection"] = Guid.NewGuid();
+                //TempData["Redirection"] = Guid.NewGuid();
 
                 return RedirectToAction("ResetPassword", "Account", new { area = "Identity", userId = user.Id });
             }
@@ -283,7 +283,7 @@ namespace PopCinema.Areas.Identity.Controllers
 
                 if (lastOTP is not null)
                 {
-                    if (lastOTP.OTPNumber == resetPasswordVM.OTP && (lastOTP.ValidTo - DateTime.UtcNow).TotalMinutes < 30 && !lastOTP.Status)
+                    if (lastOTP.OTPNumber == resetPasswordVM.OTP && (lastOTP.ValidTo - lastOTP.SendDate).TotalMinutes < 30 && !lastOTP.Status)
                     {
                         var token = await _userManager.GeneratePasswordResetTokenAsync(user);
                         var result = await _userManager.ResetPasswordAsync(user, token, resetPasswordVM.Password);

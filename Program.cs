@@ -20,7 +20,8 @@ namespace PopCinema
 
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>(option =>
             {
-                option.Password.RequiredLength = 4;
+                option.Password.RequiredLength = 8;
+                option.SignIn.RequireConfirmedEmail = true;
             })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
@@ -39,6 +40,7 @@ namespace PopCinema
 
             builder.Services.AddScoped<IMovieRepository, MovieRepository>();
             builder.Services.AddScoped<IActorRepository, ActorRepository>();
+            builder.Services.AddScoped<ICartRepository, CartRepository>();
             builder.Services.AddScoped<IDirectorRepository, DirectorRepository>();
             builder.Services.AddScoped<IShowTimeRepository, ShowTimeRepository>();
             builder.Services.AddScoped<IBookingRepository, BookingRepository>();

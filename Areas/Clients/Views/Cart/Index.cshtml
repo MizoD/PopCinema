@@ -1,0 +1,157 @@
+﻿@model List<Cart>
+
+@{
+    ViewData["Title"] = "Your Cart";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    decimal total = Model.Sum(c => c.ShowTime.TicketPrice * c.Count);
+}
+
+<section class="hero">
+    <div class="left">
+        <h1>🛒 Your Tickets</h1>
+
+        @if (!Model.Any())
+        {
+            <div class="empty-cart animated-form text-center">
+                <p class="mb-3">You haven’t added any tickets yet.</p>
+            </div>
+        }
+        else
+        {
+            <div class="container">
+                @foreach (var item in Model)
+                {
+                    <div class="ticket-entry mb-4 p-3 rounded border bg-white shadow-sm">
+                        <h4 class="text-danger mb-2">@item.ShowTime.Movie.Title</h4>
+                        <p><strong>🎬 Showtime:</strong> @item.ShowTime.StartTime.ToString("f")</p>
+                        <p><strong>🎟️ Seats:</strong> @item.Count</p>
+                        <p><strong>💰 Price per ticket:</strong> @item.ShowTime.TicketPrice.ToString("C")</p>
+                        <p><strong>🧾 Subtotal:</strong> @((item.ShowTime.TicketPrice * item.Count).ToString("C"))</p>
+
+                        <a asp-action="Remove"
+                           asp-route-userId="@item.ApplicationUserId"
+                           asp-route-showTimeId="@item.ShowTimeId"
+                           class="remove-btn btn btn-sm btn-outline-danger">
+                            🗑 Remove
+                        </a>
+                        <hr />
+                    </div>
+                }
+
+                <div class="cart-summary mt-4 text-end">
+                    <h4><strong>Total:</strong> @total.ToString("C")</h4>
+                    <div><a asp-action="Checkout" class="btn btn-success animated-button mt-3">✅ Proceed to Checkout</a></div>
+                    
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="right">
+        <img src="/assets/EatPop.png" alt="Pop Manager Eating Popcorn" class="img-fluid mb-5" />
+        <a href="/Clients/Movies/Index" class="btn btn-outline-danger mt-3 animated-button">🎬 Continue Browsing</a>
+    </div>
+</section>
+
+<style>
+    body {
+        font-family: 'Inter', sans-serif;
+    }
+
+    .hero {
+        display: flex;
+        justify-content: space-between;
+        gap: 40px;
+        padding: 40px;
+        flex-wrap: wrap;
+        background: linear-gradient(135deg, #ffffff, #fff5f5);
+        border-radius: 24px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        animation: fadeIn 0.6s ease-in-out;
+    }
+
+    .left {
+        flex: 1;
+        min-width: 320px;
+    }
+
+    .right {
+        flex: 1;
+        text-align: center;
+        min-width: 280px;
+    }
+
+    .animated-form {
+        background: #fff;
+        border-radius: 20px;
+        padding: 30px;
+        border: 1px solid #e0e0e0;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+        animation: slideUp 0.5s ease-in-out;
+    }
+
+    .ticket-entry {
+        transition: transform 0.3s ease;
+    }
+
+        .ticket-entry:hover {
+            transform: scale(1.01);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+        }
+
+    .btn.animated-button {
+        font-weight: 600;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+        border: none;
+        border-radius: 10px;
+        padding: 12px 24px;
+        background-color: #B30000;
+        color: white;
+        font-size: 16px;
+    }
+
+        .btn.animated-button:hover {
+            transform: scale(1.05);
+            background-color: #a00000;
+            box-shadow: 0 8px 24px rgba(179, 0, 0, 0.3);
+        }
+
+    .remove-btn {
+        text-decoration: underline;
+        font-size: 0.95rem;
+        transition: color 0.2s;
+    }
+
+        .remove-btn:hover {
+            color: #a00000;
+        }
+
+    @@keyframes slideUp {
+        from
+
+    {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    }
+
+    @@keyframes fadeIn {
+        from
+
+    {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+
+    }
+</style>

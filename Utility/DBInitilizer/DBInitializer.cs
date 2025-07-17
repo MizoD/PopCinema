@@ -28,10 +28,10 @@ namespace PopCinema.Utility.DBInitilizer
             if(_roleManager.Roles.IsNullOrEmpty() && _userManager.Users.IsNullOrEmpty())
             {
                 _roleManager.CreateAsync(new(SD.SuperAdmin)).GetAwaiter().GetResult();
-                _roleManager.CreateAsync(new(SD.Admin)).GetAwaiter().GetResult(); ;
-                _roleManager.CreateAsync(new(SD.Employee)).GetAwaiter().GetResult(); ;
-                _roleManager.CreateAsync(new(SD.Company)).GetAwaiter().GetResult(); ;
-                _roleManager.CreateAsync(new(SD.Customer)).GetAwaiter().GetResult(); ;
+                _roleManager.CreateAsync(new(SD.Admin)).GetAwaiter().GetResult(); 
+                _roleManager.CreateAsync(new(SD.Employee)).GetAwaiter().GetResult(); 
+                _roleManager.CreateAsync(new(SD.Company)).GetAwaiter().GetResult(); 
+                _roleManager.CreateAsync(new(SD.Customer)).GetAwaiter().GetResult(); 
 
                 _userManager.CreateAsync(new()
                 {
@@ -40,7 +40,7 @@ namespace PopCinema.Utility.DBInitilizer
                     UserName = "SuperAdmin",
                     Email = "SuperAdmin@popcinema.com",
                     EmailConfirmed = true,
-                }, "Admin123$").GetAwaiter().GetResult(); ;
+                }, "Admin123$").GetAwaiter().GetResult(); 
 
                 var user = _userManager.FindByNameAsync("SuperAdmin").GetAwaiter().GetResult();
 

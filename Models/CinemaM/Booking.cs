@@ -20,5 +20,7 @@ namespace PopCinema.Models.CinemaM
         public int? PromotionId { get; set; }
         public Promotion? Promotion { get; set; }
 
+        public string ApplicationUserId { get; set; } = null!;
+        public ApplicationUser? ApplicationUser { get; set; } 
     }
 }
