@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PopCinema.Models.MovieM;
 
@@ -7,7 +8,15 @@ namespace PopCinema.Areas.Clients.Controllers
     [Area("Clients")]
     public class BookingController : Controller
     {
-        ApplicationDbContext _context = new();
+        private ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> userManager;
+
+        public BookingController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        {
+            _context = context;
+            this.userManager = userManager;
+        }
+
         public IActionResult Index(int id)
         {
             var movie = _context.Movies
@@ -136,9 +145,11 @@ namespace PopCinema.Areas.Clients.Controllers
             });
         }
 
-        public IActionResult Booked(DateTime? date, string? search)
+        public async Task<IActionResult> BookedAsync(DateTime? date, string? search)
         {
-            var bookings = _context.Bookings
+            var user = await userManager.GetUserAsync(User);
+            if (user == null) return NotFoundPage();
+            var bookings = _context.Bookings.Where(b=> b.ApplicationUserId == user.Id)
                 .Include(b => b.ShowTime)
                     .ThenInclude(st => st.Movie)
                 .Include(b => b.CinemaHall)
