@@ -106,10 +106,10 @@
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                Are you sure you want to delete <strong id="actorName"></strong>?
+                Are you sure you want to delete <strong id="userName"></strong>?
             </div>
             <div class="modal-footer">
-                <form id="deleteForm" method="post">
+                <form id="delete" method="post">
                     <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-danger rounded-pill px-4">Yes, Delete</button>
                 </form>
@@ -200,11 +200,11 @@
         const deleteModal = document.getElementById('deleteModal');
         deleteModal.addEventListener('show.bs.modal', function (event) {
             const button = event.relatedTarget;
-            const actorId = button.getAttribute('data-id');
-            const actorName = button.getAttribute('data-name');
+            const Id = button.getAttribute('data-id');
+            const userName = button.getAttribute('data-name');
 
-            deleteModal.querySelector('#actorName').textContent = actorName;
-            deleteModal.querySelector('#deleteForm').action = `/Admin/Actor/Delete/${actorId}`;
+            deleteModal.querySelector('#userName').textContent = userName;
+            deleteModal.querySelector('#delete').action = `/Admin/User/Delete/${Id}`;
         });
     </script>
 }

@@ -100,7 +100,7 @@ namespace PopCinema.Areas.Admin.Controllers
             if (user is null) return NotFound();
 
             await _userManager.DeleteAsync(user);
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index), "User", new {area = "Admin"});
         }
 
         public async Task<IActionResult> LockUnLock(string id)

@@ -12,7 +12,7 @@ namespace PopCinema.Utility
             {
                 EnableSsl = true,
                 UseDefaultCredentials = false,
-                Credentials = new NetworkCredential("myuiprof@gmail.com", "qlxr eqsy uudg lyjn")
+                Credentials = new NetworkCredential("myuiprof@gmail.com", "ctby ogex ggei jewb")
             };
 
             return client.SendMailAsync(
