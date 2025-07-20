@@ -103,7 +103,7 @@ namespace PopCinema.Areas.Admin.Controllers
         [Authorize(Roles = $"{SD.SuperAdmin},{SD.Admin}")]
         public async Task<IActionResult> Edit(int Id)
         {
-            var showtime = await showTimeRepository.GetOneAsync(include: s=> s.Include(s=> s.CinemaHall).Include(s=> s.Movie));
+            var showtime = await showTimeRepository.GetOneAsync(s=> s.Id == Id,include: s=> s.Include(s=> s.CinemaHall).Include(s=> s.Movie));
             if (showtime is null) return NotFound();
             MoviesWithCinemasVM vm = new MoviesWithCinemasVM
             {
@@ -162,17 +162,19 @@ namespace PopCinema.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
         [Authorize(Roles = $"{SD.SuperAdmin},{SD.Admin}")]
+        [HttpPost]
         public async Task<IActionResult> Delete(int Id)
         {
-            var showtime = await showTimeRepository.GetOneAsync(include: s=> s.Include(s=> s.Bookings));
+            var showtime = await showTimeRepository.GetOneAsync(s=> s.Id == Id,include: s=> s.Include(s=> s.Bookings));
             if (showtime is null) return NotFound();
 
             if (showtime.Bookings != null && showtime.Bookings.Any())
             {
                 _context.Bookings.RemoveRange(showtime.Bookings);
+                _context.SaveChanges();
             }
-            _context.ShowTimes.Remove(showtime);
-            await _context.SaveChangesAsync();
+            await showTimeRepository.DeleteAsync(showtime);
+            
 
             return RedirectToAction("Index");
         }

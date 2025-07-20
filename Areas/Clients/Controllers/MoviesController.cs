@@ -13,7 +13,7 @@ namespace PopCinema.Areas.Clients.Controllers
 
             IQueryable<Movie> movies = _context.Movies.Include(e => e.ShowTimes).Include(e=> e.Actors).ThenInclude(e=> e.Actor);
             IQueryable<ShowTime> showTimes = _context.ShowTimes.Where(e=> e.EndTime > DateTime.Now).Include(s => s.Movie).ThenInclude(m => m.ShowTimes).Include(e=> e.CinemaHall).OrderBy(e => e.StartTime).Skip(0).Take(8);
-
+            int a = showTimes.Count();
             int totalMovies = movies.Count();
 
             movies = movies

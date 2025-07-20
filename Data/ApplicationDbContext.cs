@@ -17,6 +17,7 @@ namespace PopCinema.Data
         public DbSet<Genre> Genres { set; get; }
         public DbSet<Director> Directors { set; get; }
         public DbSet<Booking> Bookings { set; get; }
+        public DbSet<BookedItem> BookedItems { set; get; }
         public DbSet<Seat> Seats { set; get; }
         public DbSet<Promotion> Promotions { set; get; }
         public DbSet<Payment> Payments { set; get; }

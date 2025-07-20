@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using PopCinema.Utility;
 using PopCinema.Utility.DBInitilizer;
+using Stripe;
 
 namespace PopCinema
 {
@@ -16,7 +17,7 @@ namespace PopCinema
             builder.Services.AddControllersWithViews();
 
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                    options.UseSqlServer("Data Source=.;Initial Catalog=PopCinema; Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;"));
+                    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>(option =>
             {
@@ -44,7 +45,9 @@ namespace PopCinema
             builder.Services.AddScoped<IDirectorRepository, DirectorRepository>();
             builder.Services.AddScoped<IShowTimeRepository, ShowTimeRepository>();
             builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+            builder.Services.AddScoped<IBookedItemRepository, BookedItemRepository>();
 
+            StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

@@ -11,6 +11,7 @@ namespace PopCinema.Areas.Admin.Controllers
         ApplicationDbContext _context = new();
         public IActionResult Index()
         {
+            
             CountAll count = new CountAll
             {
                 ActorsCount = _context.Actors.Count(),
@@ -18,7 +19,7 @@ namespace PopCinema.Areas.Admin.Controllers
                 ShowTimesCount = _context.ShowTimes.Where(e => e.EndTime > DateTime.Now).Count(),
                 DirectorsCount = _context.Directors.Count(),
                 TotalSales = _context.Bookings.Sum(b => b.TotalPrice),
-                Bookings = _context.Bookings.Include(e => e.CinemaHall).Include(e => e.ShowTime).Include(e => e.Promotion).ToList()
+                
             };
 
             return View(count);
